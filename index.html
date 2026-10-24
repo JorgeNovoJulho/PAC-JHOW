@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAC-JHOW — MOVEL STUDIO</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#070a26">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="shortcut icon" href="pacman.ico">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-wrap">
+    <div id="game-col">
+    <!-- Capa / título -->
+    <header id="site-header">
+      <div id="title-block">
+        <h1>PAC-<span>JHOW</span></h1>
+        <p class="subtitle">Movel Studio Edition</p>
+      </div>
+      <div id="header-controls">
+        <div id="music-controls" title="Trocar a música (1-5)">
+          <button id="btn-music-prev" type="button" title="Música anterior">⏮</button>
+          <span id="music-name">Clássico</span>
+          <button id="btn-music-next" type="button" title="Próxima música">⏭</button>
+        </div>
+        <div id="volume-controls" title="Volumes">
+          <span class="vol-ico" title="Volume da música">🎵</span>
+          <input id="vol-music" type="range" min="0" max="100" value="70" title="Volume da música">
+          <span class="vol-ico" title="Volume dos efeitos sonoros">🔊</span>
+          <input id="vol-sfx" type="range" min="0" max="100" value="95" title="Volume dos efeitos sonoros">
+        </div>
+        <label id="btn-pic" class="pic-btn" title="Escolhe uma foto para o personagem">
+          📷 <span class="pic-txt">FOTO</span>
+          <input id="pic-file" type="file" accept="image/*" hidden>
+        </label>
+        <button id="btn-mute" type="button" title="Ouvir / parar a música (M)">🔊</button>
+      </div>
+    </header>
+
+    <!-- HUD -->
+    <div id="hud">
+      <div class="hud-block">
+        <div class="hud-label">PONTOS</div>
+        <div id="score" class="hud-value">0</div>
+      </div>
+      <div class="hud-block">
+        <div class="hud-label">RECORDE</div>
+        <div id="highscore" class="hud-value gold">0</div>
+      </div>
+      <div class="hud-block">
+        <div class="hud-label">CORRIDA</div>
+        <div id="sprint" class="hud-value ammo sprint"></div>
+      </div>
+      <div class="hud-block">
+        <div class="hud-label">TIROS</div>
+        <div id="ammo" class="hud-value ammo"></div>
+      </div>
+      <div class="hud-block">
+        <div class="hud-label">BOMBAS</div>
+        <div id="bombs" class="hud-value ammo bomb"></div>
+      </div>
+      <div class="hud-block">
+        <div class="hud-label">VIDAS</div>
+        <div id="lives" class="hud-value lives"></div>
+      </div>
+      <div class="hud-block">
+        <div class="hud-label">NÍVEL</div>
+        <div id="level" class="hud-value">1</div>
+      </div>
+    </div>
+
+    <!-- Cena / jogo -->
+    <div id="scene">
+      <canvas id="game" width="560" height="620">
+        O teu navegador não suporta &lt;canvas&gt;. Usa um mais recente!
+      </canvas>
+
+      <!-- Overlay: Título / Menu -->
+      <div id="ov-title" class="overlay show">
+        <div class="panel">
+          <h2 class="panel-title">PAC-JHOW</h2>
+          <p class="panel-sub">Movel Studio Edition · 20 níveis · labirintos novos · 3 vidas por nível</p>
+
+          <div id="save-bar" style="display:none">
+            <p class="hint" id="save-hint">Existe um jogo guardado…</p>
+            <button id="btn-continue-save" class="btn btn-primary">
+              ↩ Continuar no NÍVEL <span id="save-level">1</span>
+              <span class="save-pts">(<span id="save-score">0</span> pts)</span>
+            </button>
+            <button id="btn-new-game" class="btn" type="button">▶ Começar novo jogo (nível 1)</button>
+          </div>
+          <button id="btn-play" class="btn btn-primary" type="button">▶ JOGAR</button>
+          <p class="hint">ou prime <b>Enter</b></p>
+
+          <label for="pic-file" class="btn pic-pick">📷 Escolher foto do personagem</label>
+          <p class="hint" id="pic-status">Sem foto — Pac-Man clássico</p>
+
+          <div class="controls-info">
+            <div class="ci-row"><span class="key">↑ ↓ ← →</span><span class="k-label">Movimentar (setas)</span></div>
+            <div class="ci-row"><span class="key">W A S D</span><span class="k-label">Movimentar (alternativo)</span></div>
+            <div class="ci-row"><span class="key">🖱️ Rato</span><span class="k-label">Aponta o caminho</span></div>
+            <div class="ci-row"><span class="key">C</span><span class="k-label">Corrida (+70%, 5 s · 5/nível)</span></div>
+            <div class="ci-row"><span class="key">🖱️ Esq+Dir</span><span class="k-label">Corrida (junto)</span></div>
+            <div class="ci-row"><span class="key">📌 Esquerdo / B</span><span class="k-label">Bomba (5 por nível)</span></div>
+            <div class="ci-row"><span class="key">🔫 Direito / Espaço</span><span class="k-label">Tiro (5 por nível)</span></div>
+            <div class="ci-row"><span class="key">1…5</span><span class="k-label">Escolher música</span></div>
+            <div class="ci-row"><span class="key">P / ESC</span><span class="k-label">Pausar</span></div>
+            <div class="ci-row"><span class="key">M</span><span class="k-label">Ouvir / parar música</span></div>
+          </div>
+
+          <div class="highscores">
+            <h3>🏆 Recordes</h3>
+            <div id="hs-table-title" class="hs-table"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overlay: Pausa -->
+      <div id="ov-pause" class="overlay">
+        <div class="panel">
+          <h2 class="panel-title">PAUSA</h2>
+          <button id="btn-resume" class="btn btn-primary" type="button">▶ CONTINUAR</button>
+          <div class="btn-row">
+            <button id="btn-quit-save-p" class="btn" type="button">💾 SAIR E GUARDAR</button>
+            <button id="btn-menu" class="btn" type="button">☰ MENU</button>
+          </div>
+          <p class="hint">P ou ESC para continuar</p>
+        </div>
+      </div>
+
+      <!-- Overlay: Fim de nível (sem vidas) -->
+      <div id="ov-gameover" class="overlay">
+        <div class="panel">
+          <h2 class="panel-title red">GAME OVER</h2>
+          <p class="panel-sub">Acabaram as tuas vidas neste nível</p>
+          <div id="final-score" class="big-score">0</div>
+          <p class="hint">Nível alcançado: <b id="final-level">1</b></p>
+
+          <div class="btn-row">
+            <button id="btn-continue" class="btn btn-primary" type="button">
+              ▶ CONTINUAR (nível <span id="continue-level">1</span>)
+            </button>
+            <button id="btn-quit-save" class="btn" type="button">💾 GUARDAR</button>
+            <button id="btn-gameover-home" class="btn" type="button">↩ VOLTAR AO INÍCIO</button>
+          </div>
+          <p class="hint">Continuar reinicia o nível e devolve 3 vidas, mantendo os pontos.</p>
+
+          <div id="hs-form">
+            <p class="hint">Novo recorde! Escreve o teu nome:</p>
+            <div class="name-row">
+              <input id="hs-name" type="text" maxlength="12" placeholder="O teu nome" autocomplete="off">
+            </div>
+          </div>
+          <p id="hs-done" class="hint done" style="display:none">✅ Recorde guardado!</p>
+
+          <div class="highscores">
+            <h3>🏆 Recordes</h3>
+            <div id="hs-table-over" class="hs-table"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overlay: Jogo completo (parabéns) -->
+      <div id="ov-complete" class="overlay">
+        <div class="panel">
+          <h2 class="panel-title">🎉 PARABÉNS!</h2>
+          <p class="panel-sub">Completaste os 20 níveis!</p>
+          <div class="praise">És fantástic@! A tua <b>destreza</b>, <b>capacidade</b> e <b>inteligência</b> são impressionantes — poucos conseguiriam domar todos os labirintos, fantasmas e monstros como tu fizeste.</div>
+          <div id="complete-score" class="big-score">0</div>
+          <p class="hint">Obrigado por jogares! 🧡</p>
+          <div class="btn-row">
+            <button id="btn-new-journey" class="btn btn-primary" type="button">✨ NOVA JORNADA</button>
+            <button id="btn-menu-title" class="btn" type="button">☰ SAIR</button>
+          </div>
+          <p class="hint">Nova jornada volta ao nível 1 e apaga os jogos guardados.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer id="site-footer">
+      <span>← → ↑ ↓ ou WASD para mover · Rato aponta o caminho</span>
+      <span class="sep">·</span>
+      <span>C / Esq+Dir corrida · 📌 Esq/B bomba · 🔫 Dir/Espaço tiro</span>
+      <span class="sep">·</span>
+      <span>P pausa · M som</span>
+    </footer>
+    </div><!-- /game-col -->
+
+    <!-- Coluna lateral: comandos + foto/música -->
+    <div id="side-col">
+    <aside id="controls-panel">
+      <h4>🎮 Comandos</h4>
+      <ul>
+        <li><b>Setas / WASD</b> — mover</li>
+        <li><b>🖱️ Rato</b> — aponta o caminho</li>
+        <li><b>📷 Foto</b> — personagem com a tua foto</li>
+        <li><b>C</b> ou <b>Esq+Dir</b> — corrida (+70%, 5 s)</li>
+        <li><b>Esq / B</b> — bomba (5/nível)</li>
+        <li><b>Dir / Espaço</b> — tiro (5/nível)</li>
+        <li><b>1…5</b> — música</li>
+        <li><b>P / ESC</b> — pausa</li>
+        <li><b>M</b> — ouvirmúsica</li>
+      </ul>
+      <h4>⭐ Itens &amp; Bichos</h4>
+      <ul>
+        <li><b>⭐ Ouro/Rubi</b> — +1000 e correção</li>
+        <li><b>🚀 Míssil</b> — mata fantasmas, recolhe itens e 25% dos pontos</li>
+        <li><b>⚠ Monstro</b> — rápido e perigoso (pontos e pílulas voltam se te apanhar)</li>
+        <li><b>💊 Pílula</b> — assusta fantasmas e abranda o monstro</li>
+      </ul>
+    </aside>
+
+    <!-- Quadro: foto do personagem + música personalizada -->
+    <section id="media-panel" aria-label="Foto e música">
+      <h4>📷 Foto do personagem</h4>
+      <div class="media-preview">
+        <img id="pic-preview" alt="Foto carregada" hidden>
+        <span id="pic-preview-empty">Sem foto</span>
+      </div>
+      <div class="media-row">
+        <label for="pic-file" class="btn pic-pick small">📷 Carregar</label>
+        <button id="btn-pic-remove" class="btn small" type="button">🗑️ Remover</button>
+      </div>
+      <p class="hint" id="pic-status-panel">Sem foto — Pac-Man clássico</p>
+
+      <h4>🎵 Música personalizada</h4>
+      <input id="music-url" class="media-input" type="url" placeholder="URL de música ou YouTube" autocomplete="off">
+      <div class="media-row">
+        <button id="btn-music-url" class="btn small" type="button">▶ Tocar URL</button>
+        <label for="music-file" class="btn pic-pick small">📂 Dispositivo</label>
+        <input id="music-file" type="file" accept="audio/*" hidden>
+      </div>
+      <div class="media-row">
+        <button id="btn-music-pause" class="btn small" type="button">⏸ Pausa</button>
+        <button id="btn-music-default" class="btn small" type="button">🎼 Padrão</button>
+        <button id="btn-music-remove" class="btn small" type="button">🗑️ Remover</button>
+      </div>
+      <div id="music-ended" class="media-row" hidden>
+        <button id="btn-music-replay" class="btn small btn-primary" type="button">🔁 Repetir</button>
+        <button id="btn-music-back-default" class="btn small" type="button">🎼 Músicas do jogo</button>
+      </div>
+      <p class="hint" id="music-status">Música padrão do jogo</p>
+      <div id="yt-wrap" hidden><div id="yt-player"></div></div>
+    </section>
+    </div><!-- /side-col -->
+  </div>
+
+  <script src="maze.js"></script>
+  <script src="audio.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

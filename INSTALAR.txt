@@ -1,0 +1,74 @@
+PAC-JHOW — Móvel Studio Edition
+================================
+
+COMO JOGAR (no teu computador)
+------------------------------
+1. Abre a pasta "pacman".
+2. Faz duplo clique em "index.html" (abre no navegador).
+3. Clica em "JOGAR".
+
+
+COMO INSTALAR NO TEU DISPOSITIVO (PWA — Android, iPhone, Windows, Mac)
+----------------------------------------------------------------------
+O jogo é uma aplicação web installável (PWA). Para instalar é preciso
+abri-lo através de um servidor (não basta o duplo clique no ficheiro).
+
+Opção A — Windows (mais fácil)
+  1. Instala o Node.js (https://nodejs.org) se ainda não tiveres.
+  2. Abre o Terminal/PowerShell na pasta "pacman" e escreve:
+         npx serve .
+  3. O terminal mostra um endereço, por exemplo: http://localhost:3000
+  4. Abre esse endereço no Chrome/Edge.
+  5. Clica no ícone de instalar (na barra de endereço) ou menu > "Instalar aplicação".
+  6. Fica com um atalho próprio (janela sem barra do navegador) e funciona offline.
+
+Opção B — iPhone / iPad
+  1. Coloca a pasta num alojamento com HTTPS (ex.: Netlify Drop, GitHub Pages)
+     ou usa a Opção A num PC da mesma rede e abre o endereço no Safari.
+  2. No Safari: botão Partilhar > "Adicionar ao ecrã principal".
+  3. Abre pelo ícone — funciona como app.
+
+Opção C — Android
+  1. Abre o endereço no Chrome.
+  2. Menu (⋮) > "Instalar aplicação" / "Adicionar ao ecrã principal".
+
+
+COMO ENVIAR A OUTRA PESSOA (sem instalar nada)
+----------------------------------------------
+Envia o ficheiro "PAC-JHOW.html" (está nesta pasta).
+É um ficheiro único com o jogo todo dentro.
+Quem receber só tem de o abrir no navegador (duplo clique) e jogar.
+Funciona offline, no PC, Mac, Linux, Android ou iPhone.
+
+
+CONTEÚDO / FUNÇÕES
+------------------
+- 20 níveis (nível 1 clássico, os restantes gerados).
+- 3 vidas por nível, fantasmas, frutas, itens especiais.
+- Míssil que mata fantasmas e o monstro no caminho, monstro especial
+  (surge entre 30 e 60 s), bombas e corrida.
+- Corrida: tecla C ou botões do rato esquerdo+direito.
+- Música eletrónica (5 faixas), efeitos sonoros e balões de fala cómicos.
+- 📷 Foto do personagem: carrega na barra lateral ou no ecrã inicial.
+  A foto fica guardada no navegador, aparece emoldurada dentro da casinha
+  dos fantasmas e pisca em vermelho durante 2 s quando o personagem morre.
+  O botão "Remover" volta a pôr o Pac-Man clássico.
+- 🎵 Música personalizada: aceita um link direto, um vídeo do YouTube ou
+  um ficheiro do dispositivo. Fica guardada até a removeres. Quando termina,
+  podes repetir a mesma ou voltar às músicas padrão do jogo.
+- A casa dos fantasmas tem sempre as quatro paredes e a saída normal;
+  os olhos dos fantasmas mortos voltam pelo labirinto até à casinha.
+- Guarda o jogo, continua no nível onde ficaste ou começa de novo.
+- Ao perder as 3 vidas: GAME OVER com Continuar / Guardar / Voltar ao início.
+- Ao completar os 20 níveis: ecrã de parabéns com Nova Jornada ou Sair.
+
+NOTAS
+-----
+- A foto e a música personalizada ficam guardadas apenas no navegador
+  e no dispositivo onde forem escolhidas.
+- O YouTube precisa de ligação à internet; um link direto ou um ficheiro
+  local também funcionam offline.
+- Para a versão instalável (PWA) é preciso abrir por HTTP/HTTPS, como
+  explicado acima. O ficheiro PAC-JHOW.html funciona com duplo clique.
+
+Bom jogo! 🟡
