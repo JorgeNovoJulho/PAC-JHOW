@@ -1,9 +1,18 @@
 # PAC-JHOW — Móvel Studio Edition
 
 Jogo Pac-Man em HTML, CSS e JavaScript puro, com labirintos gerados, foto do
-personagem, música personalizada e vários extras de ação.
+personagem, música personalizada, faixa oficial **Pac-Jhow** e vários extras de
+ação.
 
 ## Jogar
+
+### Link online (mais fácil de enviar)
+
+**<https://jorgenovojulho.github.io/PAC-JHOW/>**
+
+Abre no Chrome/Edge e escolhe **Instalar aplicação** (ou, no telemóvel,
+**Adicionar ao ecrã principal**). Fica com um ícone próprio e funciona offline
+depois da primeira visita.
 
 ### Versão instalável (PWA)
 
@@ -34,9 +43,14 @@ completo, que pode ser enviado a outra pessoa e funciona offline.
 - Balões de fala cómicos para as ações do jogo.
 - Foto do personagem persistente, emoldurada na casinha e com flash vermelho
   de 2 segundos quando o personagem morre.
+- Faixa oficial **Pac-Jhow** (MP3) como música n.º 1, tocada ao iniciar o jogo,
+  seguida das cinco faixas sintetizadas.
 - Música personalizada por URL, YouTube ou ficheiro local, persistente, com
-  opção de repetir ou voltar às cinco faixas do jogo.
-- Recordes, jogo guardado, GAME OVER com continuação e ecrã final.
+  repetição automática até o utilizador escolher as músicas padrão.
+- Efeitos sonoros cómicos ativados quando há foto: tiros, bombas, morte, comer
+  fantasmas/monstro, frutas, itens, vitaminas e corrida.
+- Recordes, jogo guardado, GAME OVER com continuação e ecrã final com a foto
+  carregada em destaque.
 
 ## Controlos
 
@@ -46,7 +60,7 @@ completo, que pode ser enviado a outra pessoa e funciona offline.
 | Corrida | C ou botões esquerdo + direito do rato |
 | Bomba | Botão esquerdo do rato ou B |
 | Tiro | Botão direito do rato ou Espaço |
-| Escolher música | 1 a 5 |
+| Escolher música | 1 a 6 |
 | Pausa | P ou Esc |
 | Ouvir / parar música | M |
 
@@ -62,7 +76,8 @@ em `localStorage`. Tudo fica no navegador/dispositivo onde foi escolhido.
 - `index.html` — página do jogo e painéis.
 - `style.css` — estilo néon/glass.
 - `maze.js` — labirintos clássico e procedural, casa dos fantasmas.
-- `audio.js` — música sintetizada e efeitos Web Audio.
+- `audio.js` — faixa MP3 n.º 1, música sintetizada e efeitos Web Audio.
+- `Pac-Jhow.mp3` — faixa oficial n.º 1, incluída na PWA e no instalador.
 - `game.js` — motor do jogo, física, IA, fotos, música e persistência.
 - `sw.js` / `manifest.webmanifest` — PWA e modo offline.
 - `PAC-JHOW.html` — build de ficheiro único.
@@ -73,6 +88,9 @@ em `localStorage`. Tudo fica no navegador/dispositivo onde foi escolhido.
 
 - O YouTube precisa de internet; links diretos e ficheiros locais funcionam
   offline.
-- A versão de ficheiro único guarda a foto e os links de música no navegador,
-  mas as restrições de `file://` podem variar entre navegadores. Para a
-  experiência completa, usa a versão instalável por HTTP/HTTPS.
+- A versão de ficheiro único leva a foto, os links de música e o MP3 **Pac-Jhow**
+  incorporados, por isso pode ser enviada e aberta com duplo clique. As
+  restrições de `file://` podem variar entre navegadores. Para a experiência
+  completa, usa a versão instalável por HTTP/HTTPS.
+- A música personalizada tem prioridade sobre as músicas padrão e só é
+  substituída quando o utilizador escolhe explicitamente outra faixa.

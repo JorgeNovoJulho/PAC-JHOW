@@ -1,7 +1,8 @@
 {
   "name": "PAC-JHOW — Movel Studio",
   "short_name": "PAC-JHOW",
-  "description": "Pac-Man moderno: 20 níveis, fantasmas, itens, monstro, 5 músicas e muito mais.",
+  "description": "Pac-Man moderno: 20 níveis, fantasmas, itens, monstro, a faixa Pac-Jhow e mais 5 músicas.",
+  "lang": "pt-PT",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

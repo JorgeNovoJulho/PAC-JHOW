@@ -32,6 +32,12 @@ Opção C — Android
   1. Abre o endereço no Chrome.
   2. Menu (⋮) > "Instalar aplicação" / "Adicionar ao ecrã principal".
 
+Opção D — Link online (a mais fácil para enviar a outra pessoa)
+  1. Envia este link: https://jorgenovojulho.github.io/PAC-JHOW/
+  2. A pessoa abre no Chrome/Edge ou Safari.
+  3. Usa "Instalar aplicação" / "Adicionar ao ecrã principal".
+  4. Depois da primeira visita, o jogo também funciona offline.
+
 
 COMO ENVIAR A OUTRA PESSOA (sem instalar nada)
 ----------------------------------------------
@@ -48,24 +54,31 @@ CONTEÚDO / FUNÇÕES
 - Míssil que mata fantasmas e o monstro no caminho, monstro especial
   (surge entre 30 e 60 s), bombas e corrida.
 - Corrida: tecla C ou botões do rato esquerdo+direito.
-- Música eletrónica (5 faixas), efeitos sonoros e balões de fala cómicos.
+- Faixa oficial Pac-Jhow (MP3) como música n.º 1, seguida de 5 faixas
+  eletrónicas, efeitos sonoros e balões de fala cómicos.
 - 📷 Foto do personagem: carrega na barra lateral ou no ecrã inicial.
   A foto fica guardada no navegador, aparece emoldurada dentro da casinha
   dos fantasmas e pisca em vermelho durante 2 s quando o personagem morre.
-  O botão "Remover" volta a pôr o Pac-Man clássico.
+  O botão "Remover" volta a pôr o Pac-Man clássico. Com foto, tens efeitos
+  sonoros engraçados ao disparar, lançar bombas, morrer, comer fantasmas,
+  monstro, frutas, itens, vitaminas e ao correr.
 - 🎵 Música personalizada: aceita um link direto, um vídeo do YouTube ou
-  um ficheiro do dispositivo. Fica guardada até a removeres. Quando termina,
-  podes repetir a mesma ou voltar às músicas padrão do jogo.
+  um ficheiro do dispositivo. Fica guardada até a removeres, tem prioridade
+  sobre as músicas padrão e repete automaticamente até escolheres outra
+  faixa ou voltares às músicas do jogo.
 - A casa dos fantasmas tem sempre as quatro paredes e a saída normal;
   os olhos dos fantasmas mortos voltam pelo labirinto até à casinha.
 - Guarda o jogo, continua no nível onde ficaste ou começa de novo.
 - Ao perder as 3 vidas: GAME OVER com Continuar / Guardar / Voltar ao início.
-- Ao completar os 20 níveis: ecrã de parabéns com Nova Jornada ou Sair.
+- Ao completar os 20 níveis: ecrã de parabéns com a tua foto em destaque,
+  elogio à tua destreza, capacidade e inteligência, e as opções Nova Jornada
+  (volta ao nível 1 e apaga os jogos guardados) ou Sair.
 
 NOTAS
 -----
 - A foto e a música personalizada ficam guardadas apenas no navegador
-  e no dispositivo onde forem escolhidas.
+  e no dispositivo onde forem escolhidas. O ficheiro Pac-Jhow.mp3 já vai
+  dentro do instalador e também incorporado no PAC-JHOW.html.
 - O YouTube precisa de ligação à internet; um link direto ou um ficheiro
   local também funcionam offline.
 - Para a versão instalável (PWA) é preciso abrir por HTTP/HTTPS, como

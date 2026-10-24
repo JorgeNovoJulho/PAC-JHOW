@@ -4,7 +4,7 @@
  *  - 20 níveis, labirinto novo por nível, cores das paredes por nível
  *  - teletransporte nas laterais E no topo/fundo
  *  - 3 vidas por nível · continue / sair-e-guardar
- *  - 5 músicas vibrantes alternadas por nível (troca manual)
+ *  - 6 músicas: Pac-Jhow (MP3) + 5 vibrantes, alternadas por nível
  *  - bombas: clique esquerdo / B — até 5 por nível; o fantasma que tocar
  *    explode e volta para a casa
  *  - fantasmas comidos pela pílula ficam na casa ATÉ o efeito acabar
@@ -344,7 +344,7 @@ function initLevel(level) {
   updateAmmo();
   updateBombs();
   updateSprint();
-  if (!customMusicActive) AudioSys.playTrack((game.level - 1) % 5);
+  if (!customMusicActive) AudioSys.playTrack((game.level - 1) % AudioSys.trackCount());
   syncMusicUI();
   enterReady(diff);
 }
@@ -917,7 +917,7 @@ function restoreDots() {
 }
 function monsterEatPacman() {
   if (game.state !== "play") return;
-  AudioSys.sfx.monsterBite();   // o som do monstro mantém-se (assustador)
+  fam("monsterBite");           // versão engraçada quando há foto, senão a normal
   // penalidade: perde 20% da pontuação e os pontinhos comidos voltam
   game.score = Math.max(0, Math.floor(game.score * 0.8));
   elScore.textContent = game.score.toLocaleString("pt-PT");
@@ -1398,10 +1398,17 @@ function completeGame() {
   AudioSys.sfx.win();
   AudioSys.stopMusic();
   document.getElementById("complete-score").textContent = game.score.toLocaleString("pt-PT");
+  syncCompletePhoto();
   if (qualifiesForHs(game.score)) addHighScore(getLastName() || "Jogador", game.score, game.level);
   clearSave();
   renderHighScoreTables();
   showOverlay("ov-complete");
+}
+function exitGame() {
+  // Em PWA/standalone isto fecha a janela; num separador normal o browser
+  // bloqueia e voltamos ao ecrã inicial.
+  try { window.close(); } catch (e) {}
+  setTimeout(() => { if (!document.hidden) goToTitle(); }, 80);
 }
 function goToTitle() {
   game.state = "title";
@@ -1551,7 +1558,7 @@ function setPause(on) {
   game.paused = on;
   document.getElementById("ov-pause").classList.toggle("show", on);
   if (on) { AudioSys.sfx.pause(); AudioSys.stopMusic(); }
-  else { AudioSys.sfx.resume(); if (!customMusicActive) AudioSys.playTrack(game.level ? (game.level - 1) % 5 : 0); syncMusicUI(); }
+  else { AudioSys.sfx.resume(); if (!customMusicActive) AudioSys.playTrack(game.level ? (game.level - 1) % AudioSys.trackCount() : 0); syncMusicUI(); }
 }
 function updateTitleButtons() {
   const st = loadState();
@@ -1631,7 +1638,7 @@ window.addEventListener("keydown", (ev) => {
     else if (game.state === "gameover") continueLevel();
     return;
   }
-  if (k === "1" || k === "2" || k === "3" || k === "4" || k === "5") {
+  if (k === "1" || k === "2" || k === "3" || k === "4" || k === "5" || k === "6") {
     AudioSys.lock();
     leaveCustomForDefault();
     AudioSys.playTrack(parseInt(k, 10) - 1);
@@ -1695,7 +1702,7 @@ document.getElementById("btn-continue").addEventListener("click", () => { AudioS
 document.getElementById("btn-quit-save").addEventListener("click", () => { AudioSys.sfx.click(); quitAndSave(); });
 document.getElementById("btn-quit-save-p").addEventListener("click", () => { AudioSys.sfx.click(); quitAndSave(); });
 document.getElementById("btn-menu").addEventListener("click", () => { AudioSys.sfx.click(); quitAndSave(); });
-document.getElementById("btn-menu-title").addEventListener("click", () => { AudioSys.sfx.click(); goToTitle(); });
+document.getElementById("btn-menu-title").addEventListener("click", () => { AudioSys.sfx.click(); exitGame(); });
 document.getElementById("btn-new-journey").addEventListener("click", () => { AudioSys.lock(); AudioSys.sfx.click(); clearSave(); startGame({ mode: "new" }); });
 document.getElementById("btn-new-game").addEventListener("click", () => { AudioSys.lock(); AudioSys.sfx.click(); clearSave(); startGame({ mode: "new" }); });
 document.getElementById("btn-gameover-home").addEventListener("click", () => { AudioSys.sfx.click(); goToTitle(); });
@@ -1723,6 +1730,20 @@ function setPhotoPreview(dataUrl) {
   }
   if (empty) empty.hidden = !!dataUrl;
   if (rm) rm.disabled = !dataUrl;
+  syncCompletePhoto();
+}
+
+function syncCompletePhoto() {
+  const img = document.getElementById("complete-photo");
+  const empty = document.getElementById("complete-photo-empty");
+  const caption = document.getElementById("complete-photo-caption");
+  const src = (game.picLoaded && game.playerPic) ? (game.playerPic.src || "") : "";
+  if (img) {
+    if (src) { img.src = src; img.hidden = false; }
+    else { img.removeAttribute("src"); img.hidden = true; }
+  }
+  if (empty) empty.hidden = !!src;
+  if (caption) caption.textContent = src ? "A tua foto em destaque" : "PAC-JHOW · 20 níveis";
 }
 
 function applyPhoto(dataUrl, opts) {
@@ -1771,6 +1792,7 @@ function flashPhotoPreview() {
 
 function handlePhotoFile(file) {
   if (!file) return;
+  try { AudioSys.lock(); } catch (e) {}
   const reader = new FileReader();
   reader.onload = () => {
     const raw = reader.result;
@@ -1825,6 +1847,7 @@ let customMusicActive = false;
 let ytPlayer = null;
 let ytApiLoading = false;
 let ytApiQueue = [];
+let customRepeatTimer = null;
 const customAudio = new Audio();
 customAudio.preload = "auto";
 customAudio.addEventListener("ended", () => { if (customMusicActive) onCustomMusicEnded(); });
@@ -1837,6 +1860,10 @@ customAudio.addEventListener("error", () => {
 function setMusicStatus(t) {
   const el = document.getElementById("music-status");
   if (el) el.textContent = t;
+}
+
+function clearCustomRepeat() {
+  if (customRepeatTimer) { clearTimeout(customRepeatTimer); customRepeatTimer = null; }
 }
 
 function parseYouTube(url) {
@@ -1897,6 +1924,7 @@ function persistMusic() {
 }
 
 function stopCustomPlayback(keepActive) {
+  clearCustomRepeat();
   try { customAudio.pause(); customAudio.currentTime = 0; } catch (e) {}
   if (ytPlayer && ytPlayer.stopVideo) { try { ytPlayer.stopVideo(); } catch (e) {} }
   const wrap = document.getElementById("yt-wrap");
@@ -1948,6 +1976,7 @@ function playYouTube(id) {
 
 function playCustomMusic(kind, src, name, opts) {
   opts = opts || {};
+  clearCustomRepeat();
   customMusicActive = true;
   savedMusic = { kind, src: src, name: name || "Música personalizada", active: true };
   if (opts.persist !== false) persistMusic();
@@ -1974,26 +2003,41 @@ function playCustomMusic(kind, src, name, opts) {
 }
 
 function onCustomMusicEnded() {
+  if (!customMusicActive || !savedMusic) return;
   const ended = document.getElementById("music-ended");
   if (ended) ended.hidden = false;
-  setMusicStatus("A música terminou. Repetir ou voltar às músicas do jogo?");
+  setMusicStatus("A repetir a tua música... (⏭ muda para as músicas do jogo)");
   syncMusicUI();
+  clearCustomRepeat();
+  // Repete automaticamente até o utilizador escolher as músicas padrão.
+  customRepeatTimer = setTimeout(() => {
+    customRepeatTimer = null;
+    if (customMusicActive && savedMusic) replayCustomMusic({ auto: true });
+  }, 2200);
 }
 
-function replayCustomMusic() {
+function replayCustomMusic(opts) {
+  opts = opts || {};
   if (!savedMusic) return;
-  try { AudioSys.sfx.click(); } catch (e) {}
+  clearCustomRepeat();
+  if (!opts.auto) { try { AudioSys.sfx.click(); } catch (e) {} }
   const ended = document.getElementById("music-ended");
   if (ended) ended.hidden = true;
-  if (savedMusic.kind === "yt") playYouTube(parseYouTube(savedMusic.src));
-  else {
-    try { customAudio.currentTime = 0; customAudio.play().catch(() => {}); } catch (e) {}
+  if (savedMusic.kind === "yt") {
+    playYouTube(parseYouTube(savedMusic.src));
+  } else {
+    try {
+      customAudio.currentTime = 0;
+      const p = customAudio.play();
+      if (p && p.catch) p.catch(() => setMusicStatus("Música pronta. Prime ▶ para repetir."));
+    } catch (e) {}
   }
   setMusicStatus("A tocar: " + savedMusic.name);
   syncMusicUI();
 }
 
 function pauseCustomMusic() {
+  clearCustomRepeat();
   if (!customMusicActive) {
     if (savedMusic) {
       playCustomMusic(savedMusic.kind, savedMusic.src, savedMusic.name, { persist: true });
@@ -2023,6 +2067,7 @@ function pauseCustomMusic() {
 
 function leaveCustomForDefault() {
   if (!customMusicActive) return;
+  clearCustomRepeat();
   stopCustomPlayback(false);
   try {
     if (savedMusic) { savedMusic.active = false; persistMusic(); }
@@ -2046,6 +2091,7 @@ function useDefaultMusic() {
 }
 
 function removeCustomMusic() {
+  clearCustomRepeat();
   stopCustomPlayback(false);
   savedMusic = null;
   try { localStorage.removeItem(MUSIC_KEY); } catch (e) {}

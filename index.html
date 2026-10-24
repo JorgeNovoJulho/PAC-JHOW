@@ -23,7 +23,7 @@
         <p class="subtitle">Movel Studio Edition</p>
       </div>
       <div id="header-controls">
-        <div id="music-controls" title="Trocar a música (1-5)">
+        <div id="music-controls" title="Trocar a música (1-6)">
           <button id="btn-music-prev" type="button" title="Música anterior">⏮</button>
           <span id="music-name">Clássico</span>
           <button id="btn-music-next" type="button" title="Próxima música">⏭</button>
@@ -108,7 +108,7 @@
             <div class="ci-row"><span class="key">🖱️ Esq+Dir</span><span class="k-label">Corrida (junto)</span></div>
             <div class="ci-row"><span class="key">📌 Esquerdo / B</span><span class="k-label">Bomba (5 por nível)</span></div>
             <div class="ci-row"><span class="key">🔫 Direito / Espaço</span><span class="k-label">Tiro (5 por nível)</span></div>
-            <div class="ci-row"><span class="key">1…5</span><span class="k-label">Escolher música</span></div>
+            <div class="ci-row"><span class="key">1…6</span><span class="k-label">Escolher música</span></div>
             <div class="ci-row"><span class="key">P / ESC</span><span class="k-label">Pausar</span></div>
             <div class="ci-row"><span class="key">M</span><span class="k-label">Ouvir / parar música</span></div>
           </div>
@@ -170,6 +170,14 @@
         <div class="panel">
           <h2 class="panel-title">🎉 PARABÉNS!</h2>
           <p class="panel-sub">Completaste os 20 níveis!</p>
+          <div id="complete-photo-wrap" class="complete-photo-wrap">
+            <img id="complete-photo" alt="A tua foto em destaque" hidden>
+            <div id="complete-photo-empty" class="complete-photo-empty">
+              <span class="complete-photo-pac">🟡</span>
+              <small>PAC-JHOW</small>
+            </div>
+          </div>
+          <p id="complete-photo-caption" class="complete-photo-caption">A tua foto em destaque</p>
           <div class="praise">És fantástic@! A tua <b>destreza</b>, <b>capacidade</b> e <b>inteligência</b> são impressionantes — poucos conseguiriam domar todos os labirintos, fantasmas e monstros como tu fizeste.</div>
           <div id="complete-score" class="big-score">0</div>
           <p class="hint">Obrigado por jogares! 🧡</p>
@@ -202,7 +210,7 @@
         <li><b>C</b> ou <b>Esq+Dir</b> — corrida (+70%, 5 s)</li>
         <li><b>Esq / B</b> — bomba (5/nível)</li>
         <li><b>Dir / Espaço</b> — tiro (5/nível)</li>
-        <li><b>1…5</b> — música</li>
+        <li><b>1…6</b> — música</li>
         <li><b>P / ESC</b> — pausa</li>
         <li><b>M</b> — ouvirmúsica</li>
       </ul>

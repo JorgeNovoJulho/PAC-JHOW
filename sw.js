@@ -1,5 +1,5 @@
 /* PAC-JHOW — service worker (jogo offline / instalável) */
-const CACHE = "pac-jhow-v8";
+const CACHE = "pac-jhow-v10";
 const ASSETS = [
   "./",
   "./index.html",
@@ -7,6 +7,7 @@ const ASSETS = [
   "./game.js",
   "./audio.js",
   "./maze.js",
+  "./Pac-Jhow.mp3",
   "./pacman.ico",
   "./manifest.webmanifest",
   "./icons/icon-192.png",

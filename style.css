@@ -315,6 +315,51 @@ body {
 }
 .praise b { color: var(--accent); }
 
+/* Foto em destaque no ecrã de finalização */
+.complete-photo-wrap {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  margin: 4px auto 8px;
+  border-radius: 20px;
+  padding: 5px;
+  background: linear-gradient(145deg, #ffe79a, #ffb52e 55%, #8a5a10);
+  box-shadow: 0 0 0 1px rgba(255, 240, 180, 0.55), 0 12px 34px rgba(0, 0, 0, 0.45), 0 0 34px rgba(255, 210, 74, 0.35);
+}
+#complete-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  background: #101840;
+}
+.complete-photo-empty {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: radial-gradient(circle at 50% 35%, #26356f, #0b1130 70%);
+  color: #ffd24a;
+}
+.complete-photo-pac { font-size: 78px; line-height: 1; filter: drop-shadow(0 0 18px rgba(255, 210, 74, 0.55)); }
+.complete-photo-empty small { font-size: 10px; letter-spacing: 3px; color: #9fb2e8; }
+.complete-photo-caption {
+  margin: 0 0 6px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #8fa4dc;
+}
+@media (max-width: 480px) {
+  .complete-photo-wrap { width: 150px; height: 150px; }
+  .complete-photo-pac { font-size: 62px; }
+}
+
 /* Botão de foto dentro do painel inicial */
 .pic-pick {
   display: inline-flex;

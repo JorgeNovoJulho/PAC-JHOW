@@ -3,8 +3,8 @@
  * -------------------------------------------------------------------------
  * Música sintetizada com sons mais "reais": pads suaves, plucks com brilho,
  * baixo quente, bateria subtil e efeitos de espaço (eco/reaverb).
- *   - 5 músicas diferentes, alternadas automaticamente por nível
- *   - troca manual (⏮/⏭, teclas 1-5), botão ouvir/parar
+ *   - 6 músicas: a faixa oficial Pac-Jhow (MP3) + 5 sintetizadas
+ *   - troca manual (⏮/⏭, teclas 1-6), botão ouvir/parar
  *   - a música NÃO para quando o personagem morre
  * =========================================================================
  */
@@ -47,8 +47,14 @@ const AudioSys = (function () {
     return a;
   }
 
-  /* ----------------------- As 5 músicas (vibrantes) --------------------- */
+  /* ----------------------- As músicas do jogo --------------------------- */
+  const DEFAULT_TRACK_FILE = "Pac-Jhow.mp3";
   const TRACKS = [
+    {
+      // Faixa 1: música enviada pelo autor, tocada no arranque do jogo.
+      name: "Pac-Jhow", file: DEFAULT_TRACK_FILE, tempo: 120, drums: "none", padVol: 0,
+      chords: [], lead: [], counter: [], bass: []
+    },
     {
       name: "Neon Rush", tempo: 134, drums: "bright", padVol: 0.12,
       chords: [["D3", "F3", "A3"], ["Bb2", "D3", "F3"], ["F3", "A3", "C4"], ["C3", "E3", "G3"]],
@@ -144,6 +150,17 @@ const AudioSys = (function () {
   /* --------------------------- Motor / espaço --------------------------- */
   let musicTimer = null, musicOn = false, nextStepTime = 0, stepIndex = 0;
 
+  // Faixa 1 é um ficheiro MP3 real (pode ser substituído no build autónomo
+  // por um data URI). As restantes continuam a ser sintetizadas.
+  const assetAudio = new Audio();
+  assetAudio.preload = "auto";
+  assetAudio.loop = true;
+  assetAudio.volume = musicVol;
+  assetAudio.addEventListener("error", () => {
+    // Se o MP3 não estiver disponível, usa a primeira faixa sintetizada.
+    if (musicOn) { currentTrack = 1; stopMusic(); startCurrent(); }
+  });
+
   function ensure() {
     if (ctx) return true;
     try {
@@ -176,11 +193,13 @@ const AudioSys = (function () {
   }
   function resume() {
     if (ctx && ctx.state === "suspended") ctx.resume();
-    if (ctx && musicOn) startCurrent();
+    if (musicOn) startCurrent();
   }
   function lock() {
     if (!ensure()) return;
     if (ctx.state === "suspended") ctx.resume();
+    // O browser pode bloquear o MP3 no arranque; tenta de novo no 1.º gesto.
+    if (musicOn && enabled && TRACKS[currentTrack].file && assetAudio.paused) startAsset();
   }
 
   /* --------------------------- Instrumentos ---------------------------- */
@@ -291,16 +310,39 @@ const AudioSys = (function () {
     }
   }
 
-  function stopMusic() {
-    musicOn = false;
+  function stopSynth() {
     if (musicTimer) { clearInterval(musicTimer); musicTimer = null; }
   }
 
+  function startAsset() {
+    const tr = TRACKS[currentTrack];
+    if (!enabled || !tr || !tr.file) return;
+    musicOn = true;
+    stopSynth();
+    try {
+      if (assetAudio.getAttribute("src") !== tr.file) assetAudio.src = tr.file;
+      assetAudio.volume = musicVol;
+      const p = assetAudio.play();
+      if (p && p.catch) p.catch(() => {});
+    } catch (e) {}
+  }
+
+  function stopMusic() {
+    musicOn = false;
+    stopSynth();
+    try { assetAudio.pause(); } catch (e) {}
+  }
+
   function startCurrent() {
-    if (!ensure()) return;
     if (!enabled) return;
+    const tr = TRACKS[currentTrack];
+    if (!tr) return;
+    if (tr.file) { startAsset(); return; }
+    if (!ensure()) return;
     if (musicOn) return;                 // já toca — continua (não reinicia)
     musicOn = true;
+    stopSynth();
+    try { assetAudio.pause(); } catch (e) {}
     stepIndex = 0;
     nextStepTime = ctx.currentTime + 0.05;
     if (ctx.state === "suspended") ctx.resume();
@@ -308,9 +350,19 @@ const AudioSys = (function () {
   }
 
   function playTrack(i) {
-    currentTrack = ((i % TRACKS.length) + TRACKS.length) % TRACKS.length;
-    if (enabled) startCurrent();
-    else stopMusic();
+    const next = ((i % TRACKS.length) + TRACKS.length) % TRACKS.length;
+    const changed = next !== currentTrack;
+    currentTrack = next;
+    if (!enabled) { stopMusic(); return; }
+    if (changed) {
+      stopMusic();                       // troca de faixa: começa do início
+      try { assetAudio.currentTime = 0; } catch (e) {}
+      startCurrent();
+      return;
+    }
+    if (!musicOn) { startCurrent(); return; }
+    const tr = TRACKS[currentTrack];
+    if (tr.file && assetAudio.paused) startAsset();
   }
   function nextTrack() { playTrack(currentTrack + 1); }
   function prevTrack() { playTrack(currentTrack - 1); }
@@ -324,6 +376,7 @@ const AudioSys = (function () {
   function setMusicVolume(v) {
     musicVol = clamp01(v);
     if (musicBus) musicBus.gain.value = 0.8 * musicVol;
+    try { assetAudio.volume = musicVol; } catch (e) {}
   }
   function getMusicVolume() { return musicVol; }
   function setSfxVolume(v) {
