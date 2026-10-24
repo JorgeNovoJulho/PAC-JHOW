@@ -1,5 +1,5 @@
 /* PAC-JHOW — service worker (jogo offline / instalável) */
-const CACHE = "pac-jhow-v10";
+const CACHE = "pac-jhow-v11";
 const ASSETS = [
   "./",
   "./index.html",

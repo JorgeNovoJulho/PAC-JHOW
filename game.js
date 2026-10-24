@@ -1976,6 +1976,8 @@ function playYouTube(id) {
 
 function playCustomMusic(kind, src, name, opts) {
   opts = opts || {};
+  const ytId = kind === "yt" ? parseYouTube(src) : null;
+  if (kind === "yt" && !ytId) { setMusicStatus("URL de YouTube inválida."); return; }
   clearCustomRepeat();
   customMusicActive = true;
   savedMusic = { kind, src: src, name: name || "Música personalizada", active: true };
@@ -1984,10 +1986,8 @@ function playCustomMusic(kind, src, name, opts) {
   const ended = document.getElementById("music-ended");
   if (ended) ended.hidden = true;
   if (kind === "yt") {
-    const id = parseYouTube(src);
-    if (!id) { customMusicActive = false; setMusicStatus("URL de YouTube inválida."); return; }
     setMusicStatus("A carregar: " + savedMusic.name);
-    playYouTube(id);
+    playYouTube(ytId);
   } else {
     try {
       customAudio.src = src;
@@ -2125,11 +2125,22 @@ function restoreCustomMusic() {
   if (!savedMusic || !savedMusic.src && savedMusic.kind !== "file") return;
   if (savedMusic.kind === "file") {
     idbGet("music").then((blob) => {
-      if (!blob) { setMusicStatus("Ficheiro de música não encontrado."); return; }
+      if (!blob) {
+        setMusicStatus("Ficheiro de música não encontrado. Usa as músicas padrão ou remove a música guardada.");
+        if (savedMusic) { savedMusic.active = false; persistMusic(); }
+        if (!customMusicActive) AudioSys.playTrack(0);
+        syncMusicUI();
+        return;
+      }
       savedMusic.src = URL.createObjectURL(blob);
       setMusicStatus("Música guardada: " + savedMusic.name + (savedMusic.active ? " — toca no primeiro clique." : " — prime ▶ para ouvir."));
       armMusicAutoplay();
-    }).catch(() => setMusicStatus("Música guardada, mas não foi possível recuperar o ficheiro."));
+    }).catch(() => {
+      setMusicStatus("Música guardada, mas não foi possível recuperar o ficheiro. Usa as músicas padrão.");
+      if (savedMusic) { savedMusic.active = false; persistMusic(); }
+      if (!customMusicActive) AudioSys.playTrack(0);
+      syncMusicUI();
+    });
     return;
   }
   const input = document.getElementById("music-url");
