@@ -280,6 +280,71 @@ body {
   transition: transform 0.08s, border-color 0.15s;
 }
 #btn-mute:hover { transform: scale(1.07); border-color: var(--accent); }
+#btn-settings {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--accent);
+  font-size: 18px;
+  width: 46px;
+  height: 42px;
+  border-radius: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: transform 0.08s, border-color 0.15s, box-shadow 0.15s;
+}
+#btn-settings:hover { transform: scale(1.07); border-color: var(--accent); }
+#btn-settings.update-available {
+  border-color: var(--green);
+  box-shadow: 0 0 18px rgba(125, 255, 176, 0.65);
+  animation: updateGlow 1.4s ease-in-out infinite;
+}
+@keyframes updateGlow {
+  0%, 100% { box-shadow: 0 0 10px rgba(125, 255, 176, 0.35); }
+  50% { box-shadow: 0 0 24px rgba(125, 255, 176, 0.85); }
+}
+
+/* Área de opções / atualizações */
+.settings-panel { max-width: 560px; text-align: left; }
+.settings-version { color: #8ba0d8; font-size: 12px; margin: 0 0 12px; }
+.settings-version b { color: var(--accent); }
+.settings-label {
+  display: block;
+  margin: 12px 0 5px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.settings-panel select.media-input { cursor: pointer; }
+.settings-check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 12px 0 4px;
+  color: #c9d7ff;
+  font-size: 12px;
+}
+.settings-check input { accent-color: var(--accent); }
+.settings-actions { margin-top: 14px; }
+.settings-status {
+  min-height: 32px;
+  margin: 12px 0 4px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(4, 8, 28, 0.55);
+  border: 1px solid rgba(96, 130, 255, 0.25);
+  white-space: pre-wrap;
+}
+.settings-status.ok { color: var(--green); border-color: rgba(125, 255, 176, 0.45); }
+.settings-status.err { color: #ff9d9d; border-color: rgba(255, 91, 91, 0.45); }
+.settings-note { font-size: 11px; }
+.settings-panel code {
+  color: var(--accent);
+  background: rgba(255, 210, 74, 0.08);
+  padding: 1px 4px;
+  border-radius: 4px;
+}
 
 /* Botão de escolher foto do personagem */
 .pic-btn {

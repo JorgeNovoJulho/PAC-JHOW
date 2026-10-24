@@ -1,35 +1,38 @@
 # PAC-JHOW — Móvel Studio Edition
 
-Jogo Pac-Man em HTML, CSS e JavaScript puro, com labirintos gerados, foto do
-personagem, música personalizada, faixa oficial **Pac-Jhow** e vários extras de
-ação.
+Jogo Pac-Man para **Windows**, com 20 níveis, foto do personagem, música
+personalizada, faixa oficial **Pac-Jhow** e extras de ação. A aplicação é
+instalada como um programa normal: **não é preciso abrir o navegador**.
 
-## Jogar
+## Instalar no Windows
 
-### Link online (mais fácil de enviar)
+1. Instala o **`PAC-JHOW-Setup-1.0.1.exe`** (pasta `dist` ou a versão publicada
+   nas Releases do GitHub).
+2. Se o Windows mostrar **“O Windows protegeu o seu PC”**, clica em
+   **Mais informações → Executar mesmo assim**. O instalador ainda não tem
+   assinatura digital paga; o código-fonte é público e verificável.
+3. Segue o instalador. No fim, abre pelo atalho **PAC-JHOW** no Ambiente de
+   Trabalho ou no menu Iniciar.
 
-**<https://jorgenovojulho.github.io/PAC-JHOW/>**
+O instalador é **por utilizador** (não precisa de administrador) e mantém a
+foto, a música e o jogo guardado ao desinstalar. Esses dados ficam em
+`%APPDATA%\PAC-JHOW\`.
 
-Abre no Chrome/Edge e escolhe **Instalar aplicação** (ou, no telemóvel,
-**Adicionar ao ecrã principal**). Fica com um ícone próprio e funciona offline
-depois da primeira visita.
+## Atualizações
 
-### Versão instalável (PWA)
+Abre **⚙️ Opções** no canto superior direito. Podes escolher:
 
-Abre um terminal na pasta do projeto e corre:
+- **GitHub Releases (público)** — predefinido; usa a última Release de
+  `JorgeNovoJulho/PAC-JHOW`.
+- **Servidor próprio / local** — um servidor HTTPS (ou
+  `http://127.0.0.1:8787/` para testes no teu PC).
 
-```bash
-npx serve .
-```
+A aplicação Procura → mostra a versão → Transferir → **Instalar e reiniciar**.
+Nunca instala nada sem confirmação. O `latest.yml` inclui o `sha512` do
+instalador, que é verificado após a transferência.
 
-Depois abre o endereço indicado no Chrome/Edge e usa **Instalar aplicação**.
-Também podes alojar a pasta num serviço com HTTPS (GitHub Pages, Netlify, etc.)
-e instalar a partir do telemóvel.
-
-### Ficheiro único
-
-Abre **`PAC-JHOW.html`** com duplo clique. É um ficheiro autónomo, com o jogo
-completo, que pode ser enviado a outra pessoa e funciona offline.
+Para testar o servidor local, consulta **[ATUALIZACOES.md](ATUALIZACOES.md)** e
+usa o `INICIAR-SERVIDOR-ATUALIZACOES.bat`.
 
 ## Funcionalidades
 
@@ -51,6 +54,8 @@ completo, que pode ser enviado a outra pessoa e funciona offline.
   fantasmas/monstro, frutas, itens, vitaminas e corrida.
 - Recordes, jogo guardado, GAME OVER com continuação e ecrã final com a foto
   carregada em destaque.
+- Correção do fluxo de morte: o jogo retoma sempre a vida seguinte, sem
+  congelar nem deixar o ecrã num estado inválido.
 
 ## Controlos
 
@@ -63,34 +68,54 @@ completo, que pode ser enviado a outra pessoa e funciona offline.
 | Escolher música | 1 a 6 |
 | Pausa | P ou Esc |
 | Ouvir / parar música | M |
+| Opções | ⚙️ ou Ctrl+, |
 
 ## Foto e música
 
 O painel **Foto do personagem** e **Música personalizada** fica na barra
 lateral, por baixo dos comandos. A foto é reduzida para 900 px no lado maior
 antes de ser guardada; a música de ficheiro é guardada em IndexedDB e os links
-em `localStorage`. Tudo fica no navegador/dispositivo onde foi escolhido.
+em `localStorage`. Tudo fica no dispositivo onde foi escolhido e sobrevive a
+mortes, novas vidas, fechar e reabrir a aplicação.
 
-## Estrutura
+## Para programadores
 
-- `index.html` — página do jogo e painéis.
-- `style.css` — estilo néon/glass.
+Requisitos: Node.js 24+ e Windows x64.
+
+```powershell
+npm install
+npm start          # abrir em modo de desenvolvimento
+npm run dist       # criar o instalador em dist\
+npm run update-server
+```
+
+O código é público e aceita melhorias por **Pull Request**. Uma alteração só
+chega aos jogadores depois de revista, integrada na `main` e publicada como
+Release com uma tag `vX.Y.Z`; o workflow do GitHub compila o instalador e os
+metadados de atualização. Isto evita que código de terceiros não revisto seja
+executado automaticamente nos PCs dos jogadores.
+
+### Estrutura
+
+- `electron/main.js` — janela, opções, updater e menu.
+- `electron/preload.js` — ponte segura para a interface.
+- `index.html` / `style.css` — interface do jogo e opções.
 - `maze.js` — labirintos clássico e procedural, casa dos fantasmas.
 - `audio.js` — faixa MP3 n.º 1, música sintetizada e efeitos Web Audio.
-- `Pac-Jhow.mp3` — faixa oficial n.º 1, incluída na PWA e no instalador.
+- `Pac-Jhow.mp3` — faixa oficial n.º 1.
 - `game.js` — motor do jogo, física, IA, fotos, música e persistência.
-- `sw.js` / `manifest.webmanifest` — PWA e modo offline.
-- `PAC-JHOW.html` — build de ficheiro único.
-- `PAC-JHOW-Instalavel.zip` — pacote com todos os ficheiros da PWA.
-- `INSTALAR.txt` — instruções rápidas em português.
+- `settings.js` — área ⚙️ Opções e atualizações.
+- `update-server/server.js` — servidor local de atualizações.
+- `ATUALIZACOES.md` — testar atualizações, servidor real e Releases.
+- `.github/workflows/build-release.yml` — build e Release automáticos.
 
 ## Notas
 
 - O YouTube precisa de internet; links diretos e ficheiros locais funcionam
   offline.
-- A versão de ficheiro único leva o MP3 **Pac-Jhow** incorporado; a foto e os
-  links de música ficam guardados no navegador. Pode ser enviada e aberta com
-  duplo clique. As restrições de `file://` podem variar entre navegadores. Para
-  a experiência completa, usa a versão instalável por HTTP/HTTPS.
-- A música personalizada tem prioridade sobre as músicas padrão e só é
-  substituída quando o utilizador escolhe explicitamente outra faixa.
+- A foto e a música personalizada ficam apenas no dispositivo onde foram
+  escolhidas.
+- A aplicação é Electron; a interface usa HTML/JS, mas o jogo é executado como
+  programa instalado, sem barra de navegador.
+- O instalador não está assinado digitalmente. Para distribuição pública sem
+  aviso do SmartScreen é necessário um certificado de assinatura de código.

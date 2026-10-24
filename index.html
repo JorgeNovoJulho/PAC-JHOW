@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PAC-JHOW — MOVEL STUDIO</title>
-  <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#070a26">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -39,6 +38,7 @@
           <input id="pic-file" type="file" accept="image/*" hidden>
         </label>
         <button id="btn-mute" type="button" title="Ouvir / parar a música (M)">🔊</button>
+        <button id="btn-settings" type="button" title="Opções e atualizações">⚙️</button>
       </div>
     </header>
 
@@ -188,6 +188,46 @@
           <p class="hint">Nova jornada volta ao nível 1 e apaga os jogos guardados.</p>
         </div>
       </div>
+
+      <!-- Overlay: Opções / atualizações -->
+      <div id="ov-settings" class="overlay">
+        <div class="panel settings-panel">
+          <h2 class="panel-title">⚙️ OPÇÕES</h2>
+          <p class="panel-sub">Atualizações da aplicação</p>
+          <p class="settings-version">Versão instalada: <b id="settings-version">—</b></p>
+
+          <label class="settings-label" for="update-provider">Origem das atualizações</label>
+          <select id="update-provider" class="media-input">
+            <option value="generic">Servidor próprio / local</option>
+            <option value="github">GitHub Releases (público)</option>
+          </select>
+
+          <div id="update-server-box">
+            <label class="settings-label" for="update-server">Endereço do servidor</label>
+            <input id="update-server" class="media-input" type="url" placeholder="https://atualizacoes.exemplo.com/pac-jhow/" autocomplete="off">
+            <p class="hint">Teste local: <code>http://127.0.0.1:8787/</code>. No servidor real usa sempre HTTPS.</p>
+          </div>
+
+          <div id="update-github-box" hidden>
+            <label class="settings-label" for="update-repo">Repositório GitHub</label>
+            <input id="update-repo" class="media-input" type="text" placeholder="JorgeNovoJulho/PAC-JHOW" autocomplete="off">
+            <p class="hint">As atualizações são lidas da última Release publicada.</p>
+          </div>
+
+          <label class="settings-check"><input id="update-auto" type="checkbox"> Verificar ao abrir a aplicação</label>
+
+          <div class="btn-row settings-actions">
+            <button id="btn-settings-save" class="btn btn-primary" type="button">💾 GUARDAR</button>
+            <button id="btn-update-check" class="btn" type="button">🔄 PROCURAR</button>
+            <button id="btn-update-download" class="btn" type="button" hidden>⬇️ TRANSFERIR</button>
+            <button id="btn-update-install" class="btn btn-primary" type="button" hidden>✅ INSTALAR E REINICIAR</button>
+          </div>
+
+          <p id="update-status" class="hint settings-status">—</p>
+          <p class="hint settings-note" id="settings-mode-note"></p>
+          <button id="btn-settings-close" class="btn" type="button">FECHAR</button>
+        </div>
+      </div>
     </div>
 
     <footer id="site-footer">
@@ -261,5 +301,6 @@
   <script src="maze.js"></script>
   <script src="audio.js"></script>
   <script src="game.js"></script>
+  <script src="settings.js"></script>
 </body>
 </html>

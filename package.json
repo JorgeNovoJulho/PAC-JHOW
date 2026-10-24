@@ -1,0 +1,79 @@
+{
+  "name": "pac-jhow",
+  "productName": "PAC-JHOW",
+  "version": "1.0.1",
+  "description": "PAC-JHOW — jogo de Pac-Man com 20 níveis, foto personalizada, música e atualizações.",
+  "author": "JorgeNovoJulho",
+  "license": "MIT",
+  "private": true,
+  "main": "electron/main.js",
+  "homepage": "https://github.com/JorgeNovoJulho/PAC-JHOW",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JorgeNovoJulho/PAC-JHOW.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis --x64",
+    "dist:dir": "electron-builder --win dir --x64",
+    "update-server": "node update-server/server.js"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11"
+  },
+  "devDependencies": {
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "com.jorgenovojulho.pacjhow",
+    "productName": "PAC-JHOW",
+    "artifactName": "PAC-JHOW-Setup-${version}.${ext}",
+    "asar": true,
+    "compression": "normal",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "style.css",
+      "game.js",
+      "audio.js",
+      "maze.js",
+      "settings.js",
+      "Pac-Jhow.mp3",
+      "pacman.ico",
+      "icons/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "pacman.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PAC-JHOW",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false
+    },
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://127.0.0.1:8787/"
+      }
+    ]
+  }
+}

@@ -380,7 +380,13 @@ function enterReady(diff) {
 
 /* ------------------------------ Paredes (paletas) ------------------------ */
 function rrPath(x, y, w, h, r, p) {
-  r = Math.min(r, w / 2, h / 2);
+  // Durante a animação de morte o quadro da foto pode ficar com menos de
+  // 2 px. Sem estes limites, arcTo() recebe um raio negativo e lança uma
+  // exceção a meio do desenho, deixando o canvas num estado inválido.
+  w = Math.max(0, w);
+  h = Math.max(0, h);
+  if (w <= 0 || h <= 0) return;
+  r = Math.max(0, Math.min(r, w / 2, h / 2));
   p.moveTo(x + r, y);
   p.arcTo(x + w, y, x + w, y + h, r);
   p.arcTo(x + w, y + h, x, y + h, r);
@@ -1405,8 +1411,8 @@ function completeGame() {
   showOverlay("ov-complete");
 }
 function exitGame() {
-  // Em PWA/standalone isto fecha a janela; num separador normal o browser
-  // bloqueia e voltamos ao ecrã inicial.
+  // Na aplicação instalada fecha a janela (e a aplicação). Em modo de
+  // desenvolvimento, se a janela não fechar, volta ao ecrã inicial.
   try { window.close(); } catch (e) {}
   setTimeout(() => { if (!document.hidden) goToTitle(); }, 80);
 }
@@ -1614,6 +1620,11 @@ const KEYDIRS = {
 const heldKeys = new Set();
 
 window.addEventListener("keydown", (ev) => {
+  // Não deixa atalhos do jogo interferir com campos de texto nem com as opções.
+  const tag = ev.target && ev.target.tagName;
+  if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+  const settingsOverlay = document.getElementById("ov-settings");
+  if (settingsOverlay && settingsOverlay.classList.contains("show")) return;
   AudioSys.lock();
   const k = ev.key;
   if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(k)) ev.preventDefault();
@@ -2405,10 +2416,11 @@ function drawPhotoPanel(px, py, deadT) {
   if (deadT > 0) {
     const t = Math.min(1, Math.max(0, deadT));
     const k = 1 - t;
-    if (k <= 0.01) { ctx.restore(); return; }
+    const size = S * k;
+    if (size < 3) { ctx.restore(); ctx.globalAlpha = 1; return; }
     ctx.rotate(t * 2.6);
     ctx.globalAlpha = Math.max(0.15, 1 - t);
-    photoSquare(S * k);
+    photoSquare(size);
   } else {
     photoSquare(S);
   }
@@ -2416,6 +2428,7 @@ function drawPhotoPanel(px, py, deadT) {
   ctx.globalAlpha = 1;
 }
 function photoSquare(S) {
+  if (!(S >= 3)) return;
   const x = -S / 2, y = -S / 2;
   ctx.shadowColor = game.sprintT > 0 ? "rgba(125,232,255,0.9)" : "rgba(255,210,74,0.75)";
   ctx.shadowBlur = 12;
@@ -2930,6 +2943,11 @@ function drawMessages() {
   }
 }
 function draw() {
+  // Recupera o contexto mesmo que um frame anterior tenha falhado a meio.
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = "source-over";
+  ctx.shadowBlur = 0;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (!game.wallCanvas) return;
   const pulseA = 0.05 + 0.03 * (0.5 + 0.5 * Math.sin(game.globalTimer * 1.4));
@@ -2979,6 +2997,12 @@ function loop(now) {
   } catch (err) {
     // nunca deixa o jogo congelar por um erro num frame
     console.error("PAC-JHOW frame error:", err);
+    // Se o erro aconteceu a meio de um desenho, limpa o estado do canvas
+    // para o frame seguinte não herdar transformações/alpha inválidos.
+    try {
+      if (typeof ctx.reset === "function") ctx.reset();
+      else canvas.width = canvas.width;
+    } catch (e) {}
   }
   requestAnimationFrame(loop);
 }
@@ -3011,10 +3035,5 @@ window.addEventListener("load", () => {
   if (!savedMusic || !savedMusic.active) AudioSys.playTrack(0);
   syncMusicUI();
   showOverlay("ov-title");
-  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
-    try {
-      navigator.serviceWorker.register("./sw.js").catch(() => {});
-    } catch (e) {}
-  }
   requestAnimationFrame(loop);
 });
