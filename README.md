@@ -88,9 +88,9 @@ em `localStorage`. Tudo fica no navegador/dispositivo onde foi escolhido.
 
 - O YouTube precisa de internet; links diretos e ficheiros locais funcionam
   offline.
-- A versão de ficheiro único leva a foto, os links de música e o MP3 **Pac-Jhow**
-  incorporados, por isso pode ser enviada e aberta com duplo clique. As
-  restrições de `file://` podem variar entre navegadores. Para a experiência
-  completa, usa a versão instalável por HTTP/HTTPS.
+- A versão de ficheiro único leva o MP3 **Pac-Jhow** incorporado; a foto e os
+  links de música ficam guardados no navegador. Pode ser enviada e aberta com
+  duplo clique. As restrições de `file://` podem variar entre navegadores. Para
+  a experiência completa, usa a versão instalável por HTTP/HTTPS.
 - A música personalizada tem prioridade sobre as músicas padrão e só é
   substituída quando o utilizador escolhe explicitamente outra faixa.
