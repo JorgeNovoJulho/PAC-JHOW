@@ -813,3 +813,31 @@ canvas#game {
  .pac-mobile #pac-touch-controls .pac-actions button {min-height:51px!important;}
  .pac-mobile canvas#game {width:min(100vw,calc((100dvh - 68px - 162px - env(safe-area-inset-top) - env(safe-area-inset-bottom))*.9032258))!important;}
 }
+
+/* Android media controls — settings panel and safe top audio shortcuts */
+.pac-mobile #pac-touch-controls .pac-quick-audio {
+ position:absolute;right:max(10px,env(safe-area-inset-right));top:4px;
+ display:flex;gap:7px;align-items:center;z-index:2;pointer-events:auto;
+}
+.pac-mobile #pac-touch-controls .pac-quick-audio button {
+ position:relative!important;inset:auto!important;
+ width:36px!important;height:32px!important;min-width:36px!important;min-height:32px!important;
+ padding:0!important;font-size:19px!important;border:1px solid #648df0;
+ border-radius:8px;color:#fff;background:#1b3065;
+}
+.pac-mobile #pac-touch-controls .pac-actions {margin-top:30px!important;}
+.pac-mobile #pac-mobile-music-settings {
+ display:block;width:100%;margin:12px 0 8px;padding:10px;
+ border:1px solid #435b99;border-radius:12px;background:#0c1437;
+}
+.pac-mobile #pac-mobile-music-settings h3 {font-size:15px;color:#ffd24a;margin-bottom:8px;}
+.pac-mobile #pac-mobile-music-settings #media-panel {
+ display:block!important;width:100%!important;max-width:100%!important;
+ position:static!important;max-height:none!important;overflow:visible!important;
+ padding:4px!important;margin:0!important;background:transparent!important;
+}
+.pac-mobile #pac-mobile-music-settings .media-input {display:block;width:100%!important;min-width:0;max-width:100%;font-size:16px;}
+.pac-mobile #pac-mobile-music-settings .media-row {display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.pac-mobile #pac-mobile-music-settings .media-row .btn {flex:1 1 auto;font-size:12px;padding:9px 10px;margin:2px;}
+.pac-mobile #pac-mobile-music-settings #yt-wrap:not([hidden]) {display:block;min-height:200px;width:100%;}
+.pac-mobile #pac-mobile-music-settings #yt-player {width:100%;min-height:200px;}
