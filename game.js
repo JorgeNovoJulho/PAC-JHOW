@@ -349,6 +349,7 @@ function initLevel(level) {
   if (!customMusicActive) AudioSys.playTrack((game.level - 1) % AudioSys.trackCount());
   syncMusicUI();
   enterReady(diff);
+  if (window.PAC_SAY_EVENT) window.PAC_SAY_EVENT('levelStart', 3.2);
 }
 
 function placeEntities(diff) {
