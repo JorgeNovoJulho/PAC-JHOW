@@ -11,19 +11,42 @@
     </div>
     <div class="pac-actions">
       <button type="button" data-key="c">CORRER</button>
-      <button type="button" data-key="b">BOMBA</button>
       <button type="button" data-key=" ">TIRO</button>
+      <button type="button" data-key="b">BOMBA</button>
       <button type="button" data-key="p">PAUSA</button>
     </div>
-    <button type="button" id="pac-mobile-menu" aria-label="Configurações">⚙</button>`;
+    <div class="pac-quick-audio"><button type="button" id="pac-mobile-next" aria-label="Próxima música">⏭</button><button type="button" id="pac-mobile-mute" aria-label="Silenciar música">🔊</button><button type="button" id="pac-mobile-menu" aria-label="Configurações">⚙</button></div>`;
   document.getElementById("game-col").appendChild(controls);
   document.getElementById("pac-mobile-menu").addEventListener("click",()=>document.getElementById("btn-settings")?.click());
+  document.getElementById("pac-mobile-next").addEventListener("click",()=>document.getElementById("btn-music-next")?.click());
+  const quickMute=document.getElementById("pac-mobile-mute");
+  quickMute.addEventListener("click",()=>{document.getElementById("btn-mute")?.click();setTimeout(()=>quickMute.textContent=document.getElementById("btn-mute")?.textContent||"🔊",30);});
+  const settingsPanel=document.querySelector("#ov-settings .settings-panel");
+  const mediaPanel=document.getElementById("media-panel");
+  if(settingsPanel&&mediaPanel){
+    const mobileMusic=document.createElement("section");
+    mobileMusic.id="pac-mobile-music-settings";
+    const label=document.createElement("h3");
+    label.textContent="🎵 Música e foto";
+    mobileMusic.appendChild(label);
+    mediaPanel.hidden=false;
+    mobileMusic.appendChild(mediaPanel);
+    settingsPanel.insertBefore(mobileMusic,document.getElementById("btn-settings-close"));
+    const url=document.getElementById("music-url");
+    if(url)url.placeholder="Link de áudio direto (.mp3) ou YouTube (player visível)";
+    const file=document.getElementById("music-file");
+    if(file)file.setAttribute("accept",".mp3,audio/mpeg,audio/*");
+    const hint=document.createElement("p");
+    hint.className="hint";
+    hint.textContent="MP3 do dispositivo funciona como música de fundo. Links do YouTube usam o player oficial visível, quando disponível; não é possível reproduzir somente o áudio ocultando o vídeo.";
+    mediaPanel.appendChild(hint);
+  }
   const dispatch=(type,key)=>window.dispatchEvent(new KeyboardEvent(type,{key,bubbles:true,cancelable:true}));
   let pointer=null, activeKey=null;
   const stick=controls.querySelector("#pac-joystick");
   const knob=stick.querySelector(".pac-stick-knob");
-  const deadzone=0.12;
-  const hysteresis=1.22;
+  const deadzone=0.08;
+  const hysteresis=1.12;
   function reset(){
     if(activeKey){dispatch("keyup",activeKey);activeKey=null;}
     pointer=null;knob.style.transform="translate(-50%,-50%)";
@@ -73,6 +96,7 @@
         if(heldActions.has(e.pointerId)){dispatch("keyup",heldActions.get(e.pointerId));heldActions.delete(e.pointerId);}
       });
   });
+  document.addEventListener("visibilitychange",()=>{if(document.hidden)reset();});
   window.addEventListener("blur",()=>{
     reset();for(const key of heldActions.values())dispatch("keyup",key);heldActions.clear();
   });
