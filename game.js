@@ -976,7 +976,7 @@ function updateBombs2(dt) {
       if (dist(b.x, b.y, g.x, g.y) < 0.6) {
         game.bombs.splice(i, 1);
         addBlastRing(b.x,b.y);
-      spawnBurst(b.x, b.y, "#ff9d3d", 30, 4.5);
+        spawnBurst(b.x, b.y, "#ff9d3d", 30, 4.5);
         spawnBurst(b.x, b.y, "#fff0b0", 14, 3);
         fam("bomb");
         g.state = "eyes";
@@ -991,6 +991,7 @@ function updateBombs2(dt) {
     // explosão também atinge o monstro
     if (!boom && game.monster && dist(b.x, b.y, game.monster.x, game.monster.y) < 0.6) {
       game.bombs.splice(i, 1);
+      addBlastRing(b.x,b.y);
       spawnBurst(b.x, b.y, "#ff9d3d", 30, 4.5);
       spawnBurst(b.x, b.y, "#fff0b0", 14, 3);
       fam("bomb");
