@@ -619,6 +619,9 @@ function eatPelletAt() {
     game.grid[r][c] = " ";
     addScore(10);
     game.dotsEaten++;
+    // Small, throttled pickup sparkle; shared on desktop and Android.
+    if (game.dotsEaten % 4 === 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+      spawnBurst(c + .5, r + .5, "#ffe598", 3, 1.4);
     AudioSys.sfx.waka(Math.floor(pac.mouthT * 10) % 2 === 0);
   } else if (ch === "o") {
     game.grid[r][c] = " ";
@@ -972,7 +975,8 @@ function updateBombs2(dt) {
       if (g.state !== "active" && g.state !== "fright" && g.state !== "leaving") continue;
       if (dist(b.x, b.y, g.x, g.y) < 0.6) {
         game.bombs.splice(i, 1);
-        spawnBurst(b.x, b.y, "#ff9d3d", 30, 4.5);
+        addBlastRing(b.x,b.y);
+      spawnBurst(b.x, b.y, "#ff9d3d", 30, 4.5);
         spawnBurst(b.x, b.y, "#fff0b0", 14, 3);
         fam("bomb");
         g.state = "eyes";
@@ -1302,6 +1306,7 @@ function addScore(v) {
 function addFloating(x, y, text, color) { game.floating.push({ x, y, text, color, t: 1.3 }); }
 
 function spawnBurst(x, y, color, n, spd) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) n = Math.min(n, 4);
   for (let i = 0; i < n; i++) {
     const a = Math.random() * Math.PI * 2;
     const v = (0.4 + Math.random()) * spd;
@@ -1309,7 +1314,26 @@ function spawnBurst(x, y, color, n, spd) {
   }
   if (game.particles.length > 400) game.particles.splice(0, game.particles.length - 400);
 }
+const pacBlastRings = [];
+function addBlastRing(x,y) {
+  pacBlastRings.push({x,y,t:0,life:.38});
+  if(pacBlastRings.length>6)pacBlastRings.shift();
+}
+function drawBlastRings(){
+  ctx.save();
+  for(const r of pacBlastRings){
+    const p=Math.min(1,r.t/r.life);
+    ctx.strokeStyle="rgba(255,193,94,"+(.75*(1-p)).toFixed(3)+")";
+    ctx.lineWidth=3*(1-p)+.5;
+    ctx.beginPath();ctx.arc(r.x*TILE,r.y*TILE,4+26*p,0,Math.PI*2);ctx.stroke();
+  }
+  ctx.restore();
+}
 function updateParticles(dt) {
+  for(let i=pacBlastRings.length-1;i>=0;i--){
+    pacBlastRings[i].t+=dt;
+    if(pacBlastRings[i].t>=pacBlastRings[i].life)pacBlastRings.splice(i,1);
+  }
   for (let i = game.particles.length - 1; i >= 0; i--) {
     const p = game.particles[i];
     p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt;
@@ -1521,6 +1545,7 @@ function checkLevelClear() {
   if (game.dotsEaten >= game.dotsTotal) {
     game.state = "levelClear";
     game.clearT = 2.2;
+    if(window.PAC_SAY_EVENT)window.PAC_SAY_EVENT("victory",2.2);
     const bonus = 1000 + game.level * 100;
     addScore(bonus);
     addFloating(COLS / 2, 11.5, "NÍVEL COMPLETO!", "#ffd24a");
@@ -2977,6 +3002,17 @@ function draw() {
   drawMonster();
   drawProjectiles();
   drawParticles();
+  drawBlastRings();
+  if(game.state==="levelClear"){
+    ctx.save();
+    ctx.fillStyle="rgba(4,9,34,.78)";
+    ctx.fillRect(20,canvas.height*.39,canvas.width-40,82);
+    ctx.strokeStyle="#ffd553";ctx.lineWidth=2;
+    ctx.strokeRect(20,canvas.height*.39,canvas.width-40,82);
+    ctx.fillStyle="#ffda53";ctx.textAlign="center";ctx.font="bold 30px system-ui";
+    ctx.fillText("NÍVEL "+game.level+" CONCLUÍDO!",canvas.width/2,canvas.height*.39+49);
+    ctx.restore();
+  }
   drawFloating();
   drawMessages();
 }
