@@ -65,8 +65,8 @@
   let pointer=null, activeKey=null;
   const stick=controls.querySelector("#pac-joystick");
   const knob=stick.querySelector(".pac-stick-knob");
-  const deadzone=0.08;
-  const hysteresis=1.12;
+  const deadzone=0.12;
+  const hysteresis=1.20;
   function reset(){
     if(activeKey){dispatch("keyup",activeKey);activeKey=null;}
     pointer=null;knob.style.transform="translate(-50%,-50%)";
@@ -116,9 +116,17 @@
         if(heldActions.has(e.pointerId)){dispatch("keyup",heldActions.get(e.pointerId));heldActions.delete(e.pointerId);}
       });
   });
-  document.addEventListener("visibilitychange",()=>{if(document.hidden)reset();});
+  function clearAll(){
+    reset();
+    for(const key of heldActions.values())dispatch("keyup",key);
+    heldActions.clear();
+  }
+  document.addEventListener("visibilitychange",()=>{if(document.hidden)clearAll();});
+  document.addEventListener("pointerdown",e=>{
+    if(e.target.closest(".overlay.show"))clearAll();
+  },true);
   window.addEventListener("blur",()=>{
-    reset();for(const key of heldActions.values())dispatch("keyup",key);heldActions.clear();
+    clearAll();
   });
   controls.addEventListener("contextmenu",e=>e.preventDefault());
 })();
