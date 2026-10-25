@@ -218,6 +218,7 @@ function addHighScore(name, score, level) {
   s.push({ name: name || "Jogador", score, level: level || 1, date: new Date().toISOString() });
   s.sort((a, b) => b.score - a.score);
   saveScores(s.slice(0, 12));
+  window.PAC_LEADERBOARD?.submit?.(name || "Jogador", score, level || 1);
   return s.slice(0, 12);
 }
 function getLastName() { try { return localStorage.getItem(NAME_KEY) || ""; } catch (e) { return ""; } }
