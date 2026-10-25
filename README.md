@@ -6,7 +6,7 @@ instalada como um programa normal: **não é preciso abrir o navegador**.
 
 ## Instalar no Windows
 
-1. Instala o **`PAC-JHOW-Setup-1.0.3.exe`** (pasta `dist` ou a versão publicada
+1. Instala o **`PAC-JHOW-Setup-1.0.4.exe`** (pasta `dist` ou a versão publicada
    nas Releases do GitHub).
 2. Se o Windows mostrar **“O Windows protegeu o seu PC”**, clica em
    **Mais informações → Executar mesmo assim**. O instalador ainda não tem
@@ -31,6 +31,10 @@ A aplicação verifica automaticamente atualizações ao iniciar, baixa novas ve
 
 Para testar o servidor local, consulta **[ATUALIZACOES.md](ATUALIZACOES.md)** e
 usa o `INICIAR-SERVIDOR-ATUALIZACOES.bat`.
+
+## Ranking mundial
+
+A versão 1.0.4 mostra um ranking global consultado no GitHub, atualizado aproximadamente a cada cinco minutos. Os recordes locais permanecem offline. **O envio automático de pontuações ainda não está habilitado**: requer serviço HTTPS seguro de submissão e validação, conforme [RANKING-GLOBAL.md](RANKING-GLOBAL.md).
 
 ## Funcionalidades
 
