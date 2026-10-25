@@ -49,7 +49,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v1.1.1-android-beta PAC-JHOW-Android-1.1.0-beta.apk \
+          gh release create v1.1.1-android-beta PAC-JHOW-Android-1.1.1-beta.apk \
             --target "$GITHUB_SHA" \
             --title "PAC-JHOW Android 1.1.1 Beta" \
             --notes "Atualizacao Android com consulta automatica ao GitHub: alavanca virtual, botoes de acao, musica MP3 local e ranking. APK de teste assinado para desenvolvimento; futuras atualizacoes podem exigir reinstalacao. Consulte INSTALAR-PAC-JHOW-ANDROID.txt no repositorio." \
