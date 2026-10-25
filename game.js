@@ -1971,7 +1971,7 @@ function playYouTube(id) {
       return;
     }
     ytPlayer = new YT.Player("yt-player", {
-      width: "100%", height: "120", videoId: id,
+      width: "100%", height: "220", videoId: id,
       playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
       events: {
         onReady: (e) => { try { e.target.playVideo(); } catch (err) {} },
