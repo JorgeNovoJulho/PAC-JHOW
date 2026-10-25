@@ -625,7 +625,7 @@ function eatPelletAt() {
     addScore(50);
     game.dotsEaten++;
     activateFright();
-    say("Sai correndo...");
+    if (window.PAC_SAY_EVENT) window.PAC_SAY_EVENT("powerUp"); else say("Sai correndo...");
     fam("powerUp");
     spawnBurst(c + 0.5, r + 0.5, "#ffd24a", 14, 3.2);
   }
