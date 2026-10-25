@@ -1,0 +1,38 @@
+PAC-JHOW - GUIA DE INSTALACAO NO ANDROID
+Versao: Android 1.1.0 beta
+Pagina oficial: https://github.com/JorgeNovoJulho/PAC-JHOW/releases/tag/v1.1.0-android-beta
+Download direto: https://github.com/JorgeNovoJulho/PAC-JHOW/releases/download/v1.1.0-android-beta/PAC-JHOW-Android-1.1.0-beta.apk
+
+ANTES DE INSTALAR
+- Android: telefone ou tablet com sistema Android compativel.
+- Baixe somente da pagina oficial do repositório JorgeNovoJulho/PAC-JHOW.
+- O APK e uma versao beta e ainda nao possui assinatura comercial verificada.
+- Esse APK e assinado com chave de desenvolvimento usada na compilacao. Futuras atualizacoes podem exigir reinstalar o aplicativo; faca backup de dados importantes antes disso.
+
+PASSO A PASSO
+1) Abra o link acima no Chrome do celular.
+2) Toque no arquivo .apk e aguarde terminar o download.
+3) Abra Downloads ou o aviso de download concluido e toque no arquivo APK.
+4) Se o Android pedir permissao para instalar apps de fonte desconhecida:
+   - Escolha Configuracoes na propria mensagem;
+   - Autorize temporariamente "Permitir desta fonte" para o Chrome ou gerenciador de arquivos;
+   - Volte para o APK e toque em Instalar.
+5) Ao instalar, toque em Abrir. Depois encontre PAC-JHOW na lista de aplicativos.
+6) Se o Play Protect exibir alerta, verifique a origem e o nome do arquivo; nao ignore alertas que indiquem app malicioso. Se houver bloqueio, avise o desenvolvedor.
+7) Depois de instalar, desative novamente "Permitir desta fonte", se tiver ativado.
+
+SE DER ERRO "APP NAO INSTALADO"
+- A versao anterior pode estar assinada com outra chave debug. A desinstalacao pode apagar dados locais (progresso, records e MP3 personalizado).
+- Guarde dados importantes primeiro; depois desinstale a versao antiga e instale o novo APK.
+- Verifique espaco de armazenamento e compatibilidade do Android.
+
+COMO JOGAR
+- Joystick circular esquerdo: movimentacao.
+- Botoes a direita: CORRER, TIRO, BOMBA e PAUSA.
+- ⏭: proxima musica oficial.
+- 🔊: ativar/desativar musica.
+- Engrenagem: configuracoes e carregar MP3 do dispositivo.
+- Nao ha opcao de link do YouTube nesta versao.
+
+SEGURANCA
+Nao instale arquivos recebidos de desconhecidos e nunca desative permanentemente as protecoes do Android. 
