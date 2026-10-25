@@ -1,30 +1,53 @@
 "use strict";
 (() => {
-  const isAndroid = /Android/i.test(navigator.userAgent);
-  if (!isAndroid) return;
+  if (!/Android/i.test(navigator.userAgent)) return;
   document.documentElement.classList.add("pac-mobile");
   const controls = document.createElement("nav");
   controls.id = "pac-touch-controls";
-  controls.setAttribute("aria-label", "Comandos de toque");
-  controls.innerHTML = '<div class="pac-dpad"><button data-key="ArrowUp" aria-label="Cima">▲</button><div><button data-key="ArrowLeft" aria-label="Esquerda">◀</button><button data-key="ArrowDown" aria-label="Baixo">▼</button><button data-key="ArrowRight" aria-label="Direita">▶</button></div></div><div class="pac-actions"><button data-key="c">CORRER</button><button data-key="b">BOMBA</button><button data-key=" ">TIRO</button><button data-key="p">PAUSA</button></div>';
+  controls.setAttribute("aria-label", "Controles de jogo para Android");
+  controls.innerHTML = `
+    <div class="pac-dpad">
+      <button type="button" data-key="ArrowUp" aria-label="Cima">▲</button>
+      <button type="button" data-key="ArrowLeft" aria-label="Esquerda">◀</button>
+      <button type="button" data-key="ArrowDown" aria-label="Baixo">▼</button>
+      <button type="button" data-key="ArrowRight" aria-label="Direita">▶</button>
+    </div>
+    <div class="pac-actions">
+      <button type="button" data-key="c">CORRER</button>
+      <button type="button" data-key="b">BOMBA</button>
+      <button type="button" data-key=" ">TIRO</button>
+      <button type="button" data-key="p">PAUSA</button>
+    </div>
+    <button type="button" id="pac-mobile-menu" aria-label="Configurações">⚙</button>`;
   document.body.appendChild(controls);
-  let held = null;
-  const keyEvent = (type,key) => window.dispatchEvent(new KeyboardEvent(type,{key,bubbles:true,cancelable:true}));
-  const release = () => { if(held){keyEvent("keyup",held);held=null;} };
-  controls.querySelectorAll("button").forEach(button => {
-    const key = button.dataset.key;
-    button.addEventListener("pointerdown",e=>{
-      e.preventDefault();
-      if(key.startsWith("Arrow")) { release(); held=key; }
-      keyEvent("keydown",key);
-      button.setPointerCapture(e.pointerId);
+  const rotate = document.createElement("div");
+  rotate.id = "pac-rotate";
+  rotate.setAttribute("role", "status");
+  rotate.innerHTML = "<span>📱</span><strong>Gire o celular para jogar</strong><p>O PAC-JHOW usa a tela horizontal para mostrar o labirinto e os controles.</p>";
+  document.body.appendChild(rotate);
+  controls.querySelector("#pac-mobile-menu").addEventListener("click", () => {
+    document.getElementById("btn-settings")?.click();
+  });
+  const held = new Map();
+  const dispatch = (type,key) => window.dispatchEvent(new KeyboardEvent(type,{key,bubbles:true,cancelable:true}));
+  function release(pointerId) {
+    const key=held.get(pointerId);
+    if(key){ held.delete(pointerId); dispatch("keyup",key); }
+  }
+  controls.querySelectorAll("[data-key]").forEach(button=>{
+    const key=button.dataset.key;
+    button.addEventListener("pointerdown",ev=>{
+      ev.preventDefault();
+      dispatch("keydown",key);
+      if(key.startsWith("Arrow")) held.set(ev.pointerId,key);
+      try { button.setPointerCapture(ev.pointerId); } catch (_) {}
     });
-    for(const eventName of ["pointerup","pointercancel","lostpointercapture"]) {
-      button.addEventListener(eventName,e=>{
-        if(held===key)release();
-        else if(!key.startsWith("Arrow"))keyEvent("keyup",key);
-      });
+    for (const type of ["pointerup","pointercancel","lostpointercapture"]) {
+      button.addEventListener(type,ev=>{ release(ev.pointerId); });
     }
   });
-  window.addEventListener("blur",release);
+  window.addEventListener("blur",()=>{for(const id of held.keys())release(id);});
+  document.addEventListener("contextmenu",ev=>{
+    if(controls.contains(ev.target))ev.preventDefault();
+  });
 })();
