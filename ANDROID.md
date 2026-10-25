@@ -11,3 +11,7 @@ Execute manualmente o workflow "Android APK (test build)" em Actions após integ
 - O sistema Electron Updater é Windows-only. APK Android exige novas versões e fluxo de instalação próprio, com confirmação do usuário, ou distribuição pela Play Store.
 - Antes de publicar a versão de produção: criar keystore de assinatura Android com armazenamento seguro, versionCode crescente, assinar um APK/AAB release, configurar updates Android e confirmar compatibilidade e armazenamento.
 - As mudanças de lógica do jogo permanecem nos arquivos compartilhados da raiz.
+
+## Correção de layout mobile
+
+No Android, a partida usa um layout horizontal dedicado, com labirinto centralizado, HUD compacto superior, direcional à esquerda e ações à direita. Em retrato, aparece orientação para girar o telefone. As opções ficam acessíveis pelo ícone ⚙. O desktop mantém o layout original. Esta etapa ainda exige validação de legibilidade e interação em aparelhos reais.
