@@ -349,7 +349,7 @@ function initLevel(level) {
   if (!customMusicActive) AudioSys.playTrack((game.level - 1) % AudioSys.trackCount());
   syncMusicUI();
   enterReady(diff);
-  if (window.PAC_SAY_EVENT) window.PAC_SAY_EVENT('levelStart', 3.2);
+  if (window.PAC_SAY_EVENT) window.PAC_SAY_EVENT(game.level%4===0?"ghost":"levelStart", 3.2,game.level%4===0?["red","pink","blue","orange"][Math.floor(game.level/4-1)%4]:"pac");
 }
 
 function placeEntities(diff) {
@@ -2995,6 +2995,18 @@ function draw() {
     const al = 0.04 + 0.07 * (0.5 + 0.5 * Math.sin(game.globalTimer * 2 + st.ph));
     ctx.fillStyle = "rgba(215,228,255," + al.toFixed(3) + ")";
     ctx.beginPath(); ctx.arc((st.x + 0.5) * TILE, (st.y + 0.5) * TILE, st.size, 0, Math.PI * 2); ctx.fill();
+  }
+  // Slow atmospheric pulses in open corridors; no extra canvas layers or textures.
+  if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    ctx.save();
+    for(let i=0;i<Math.min(10,TWINKLE.length);i++){
+      const st=TWINKLE[i], p=.5+.5*Math.sin(game.globalTimer*.75+st.ph);
+      ctx.globalAlpha=.06+.10*p;
+      ctx.strokeStyle=i%2?"#69b7ff":"#ffe684";
+      ctx.lineWidth=1+p;
+      ctx.beginPath();ctx.arc((st.x+.5)*TILE,(st.y+.5)*TILE,3+5*p,0,Math.PI*2);ctx.stroke();
+    }
+    ctx.restore();
   }
   drawPellets();
   drawHousePhoto();
