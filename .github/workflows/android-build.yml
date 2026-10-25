@@ -1,0 +1,63 @@
+name: Android APK + cross-platform UI validation
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feat/android-capacitor-1.1.0
+permissions:
+  contents: write
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Verify preinstalled Android SDK
+        run: |
+          test -d "$ANDROID_HOME/cmdline-tools" || exit 1
+          echo "Android SDK: $ANDROID_HOME"
+      - name: Install UI browser test runner
+        run: |
+          npm install --no-save --no-package-lock playwright
+          npx playwright install chromium --with-deps
+      - name: Validate Android and desktop interfaces
+        run: node scripts/ui-smoke.mjs
+      - name: Upload UI screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PAC-JHOW-UI-viewport-tests
+          path: ui-smoke-results/*.png
+          if-no-files-found: ignore
+      - name: Install Capacitor tooling
+        run: npm install --no-save --no-package-lock @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7 @capacitor/browser@7
+      - name: Stage game assets
+        shell: bash
+        run: |
+          mkdir -p web/icons
+          cp index.html style.css game.js dialogues.js achievements.js audio.js maze.js settings.js leaderboard.js mobile-controls.js android-updater.js android-record.js web/
+          cp Pac-Jhow.mp3 Pac-Jhow-2.mp3 pacman.ico web/
+          cp -R icons/. web/icons/
+      - name: Generate Android project
+        run: npx cap add android
+      - name: Synchronize assets
+        run: npx cap sync android
+      - name: Generate official Android launcher icon
+        run: |
+          python -m pip install --quiet Pillow
+          python scripts/apply-android-icon.py
+      - name: Build test APK
+        working-directory: android
+        run: bash ./gradlew assembleDebug --no-daemon
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: PAC-JHOW-Android-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error

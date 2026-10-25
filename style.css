@@ -685,3 +685,254 @@ canvas#game {
   .panel { padding: 16px; }
   #music-name { min-width: 90px; font-size: 11px; }
 }
+
+
+
+/* PAC-JHOW Android — responsive portrait arcade layout */
+.pac-mobile,.pac-mobile body {height:100%;width:100%;overflow:hidden;}
+.pac-mobile body {display:block; margin:0; padding:0; min-height:0; overscroll-behavior:none;}
+.pac-mobile #game-wrap {position:fixed;inset:0;width:100%;height:100dvh;max-width:none;display:block;overflow:auto;overflow-x:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);margin:0;}
+.pac-mobile #game-col {display:flex;flex-direction:column;width:100%;height:auto;min-height:0;gap:0;min-width:0;}
+.pac-mobile #site-header,.pac-mobile #side-col,.pac-mobile #site-footer {display:none!important;}
+.pac-mobile #hud {position:relative;top:auto;left:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:34px;flex:none;width:100%;height:auto;gap:3px;padding:3px 5px;margin:0;background:#080e29;border-bottom:1px solid #324786;overflow:visible;z-index:6;}
+.pac-mobile #hud .hud-block {display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;width:auto;height:34px;padding:2px 1px;margin:0;box-shadow:none;border:0;background:rgba(40,61,120,.18);border-radius:5px;}
+.pac-mobile #hud .hud-label {display:block;font-size:9px;line-height:11px;letter-spacing:0;white-space:nowrap;}
+.pac-mobile #hud .hud-value {font-size:14px;line-height:16px;min-height:16px;max-width:100%;overflow:hidden;white-space:nowrap;}
+.pac-mobile #hud .hud-value.ammo,.pac-mobile #hud .hud-value.lives {font-size:10px;letter-spacing:-1px;}
+.pac-mobile #hud .hud-block:nth-child(1) {grid-column:1;}
+.pac-mobile #hud .hud-block:nth-child(2) {grid-column:2;}
+.pac-mobile #hud .hud-block:nth-child(7) {grid-column:3;grid-row:1;}
+.pac-mobile #hud .hud-block:nth-child(6) {grid-column:4;grid-row:1;}
+.pac-mobile #hud .hud-block:nth-child(3) {grid-column:1;grid-row:2;}
+.pac-mobile #hud .hud-block:nth-child(4) {grid-column:2;grid-row:2;}
+.pac-mobile #hud .hud-block:nth-child(5) {grid-column:3/span 2;grid-row:2;}
+.pac-mobile #scene {position:relative;top:auto;left:auto;transform:none;align-self:center;flex:none;width:min(100vw, calc((100dvh - 285px)*.903226));max-width:100%;height:auto;max-height:none;margin:0 auto;padding:0;overflow:visible;background:transparent;border:0;box-shadow:none;}
+.pac-mobile canvas#game {display:block;width:100%;height:auto;max-width:100%;max-height:none;aspect-ratio:560/620;margin:0;padding:0;touch-action:none;}
+.pac-mobile .overlay {inset:0;z-index:45;overflow:auto;padding:6px;align-items:flex-start;justify-content:center;}
+.pac-mobile .overlay .panel {width:min(94vw,510px);max-height:min(72dvh,650px);overflow-y:auto;margin:4px auto;padding:10px;}
+.pac-mobile .controls-info {display:none;}
+.pac-mobile .panel-title {font-size:22px;}
+.pac-mobile .panel-sub {font-size:11px;}
+.pac-mobile .highscores {margin-top:7px;}
+.pac-mobile .hs-row {font-size:11px;padding:3px 5px;}
+.pac-mobile #pac-touch-controls {position:relative;inset:auto;display:flex;flex:none;align-items:center;justify-content:space-between;width:100%;height:182px;min-height:182px;margin:2px 0 0;padding:10px max(9px,env(safe-area-inset-right)) 12px max(9px,env(safe-area-inset-left));background:linear-gradient(180deg,#101a42,#06091f);border-top:1px solid #3b518b;pointer-events:none;touch-action:none;z-index:30;}
+.pac-mobile #pac-touch-controls button,.pac-mobile #pac-joystick {pointer-events:auto;touch-action:none;user-select:none;-webkit-user-select:none;}
+.pac-mobile #pac-joystick {position:relative;left:auto;bottom:auto;flex:0 0 auto;width:clamp(112px,35vw,160px);height:clamp(112px,35vw,160px);border:5px solid #7f94c2;border-radius:50%;background:radial-gradient(circle at 35% 29%,#536cad,#172751 65%,#040921);box-shadow:inset 0 5px 13px #01091c,0 3px 13px #000b;}
+.pac-mobile .pac-stick-groove {position:absolute;inset:12px;border-radius:50%;background:radial-gradient(circle,#203b74,#080e29);border:2px solid #273c70;}
+.pac-mobile .pac-stick-knob {position:absolute;left:50%;top:50%;width:47%;height:47%;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;background:radial-gradient(circle at 30% 24%,#ffe9a0,#f94d44 35%,#991223 80%);border:3px solid #ffb45b;box-shadow:0 2px 12px #000a;}
+.pac-mobile #pac-joystick.active .pac-stick-knob {box-shadow:0 0 15px #ef4855;}
+.pac-mobile #pac-touch-controls .pac-actions {position:relative;inset:auto;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,58px);gap:7px;width:min(40vw,154px);flex:0 0 auto;margin:21px 0 0;}
+.pac-mobile #pac-touch-controls .pac-actions button {width:100%;min-width:0;min-height:58px;padding:0 2px;border-radius:12px;border:1px solid #608cfd;background:#213873;color:#fff;font-size:clamp(9px,2.5vw,12px);font-weight:800;box-shadow:0 2px 8px #0006;}
+.pac-mobile #pac-touch-controls .pac-actions button:active {background:#3d5dba;}
+.pac-mobile #pac-mobile-menu {position:absolute;top:6px;right:max(10px,env(safe-area-inset-right));left:auto;bottom:auto;width:38px;height:31px;min-width:38px;min-height:31px;border:1px solid #648df0;border-radius:9px;background:#1b3065;color:white;font-size:18px;}
+.pac-mobile #pac-rotate {display:none!important;}
+@media(max-width:370px){
+ .pac-mobile #hud {grid-auto-rows:31px;}
+ .pac-mobile #hud .hud-block {height:31px;}
+ .pac-mobile #hud .hud-label {font-size:8px;}
+ .pac-mobile #pac-touch-controls {height:162px;min-height:162px;}
+ .pac-mobile #pac-touch-controls .pac-actions {grid-template-rows:repeat(2,51px);gap:5px;}
+ .pac-mobile #pac-touch-controls .pac-actions button {min-height:51px;}
+ .pac-mobile #scene {width:min(100vw,calc((100dvh - 260px)*.903226));}
+}
+@media(orientation:landscape){
+ .pac-mobile #game-wrap {overflow:auto;}
+ .pac-mobile #scene {width:min(75vw,calc((100dvh - 170px)*.903226));}
+ .pac-mobile #pac-touch-controls {height:142px;min-height:142px;}
+ .pac-mobile #pac-joystick {width:118px;height:118px;}
+ .pac-mobile #pac-touch-controls .pac-actions {grid-template-rows:repeat(2,49px);width:148px;}
+ .pac-mobile #pac-touch-controls .pac-actions button {min-height:49px;}
+}
+
+/* Mobile v3: structural layout correction; controls belong AFTER the maze. */
+.pac-mobile #game-wrap {
+  position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;
+  padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)!important;
+  display:flex!important;flex-direction:column!important;overflow:hidden!important;
+}
+.pac-mobile #game-col {
+  position:relative!important;inset:auto!important;display:flex!important;flex-direction:column!important;
+  flex:1 1 auto!important;width:100%!important;min-height:0!important;height:100%!important;gap:0!important;
+}
+.pac-mobile #hud {
+  position:relative!important;top:auto!important;left:auto!important;right:auto!important;
+  order:0;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-rows:repeat(2,34px)!important;grid-auto-flow:row!important;
+  flex:none!important;height:76px!important;max-height:76px!important;min-height:76px!important;
+  width:100%!important;overflow:hidden!important;gap:2px!important;padding:3px 4px!important;
+}
+.pac-mobile #hud .hud-block {width:auto!important;min-width:0!important;height:32px!important;padding:1px!important;}
+.pac-mobile #hud .hud-label {font-size:clamp(7px,2vw,10px)!important;line-height:11px!important;letter-spacing:0!important;}
+.pac-mobile #hud .hud-value {font-size:clamp(11px,3vw,16px)!important;line-height:16px!important;}
+.pac-mobile #hud .hud-value.ammo,.pac-mobile #hud .hud-value.lives {font-size:clamp(8px,2vw,11px)!important;}
+.pac-mobile #scene {
+ position:relative!important;inset:auto!important;top:auto!important;left:auto!important;
+ order:1;transform:none!important;flex:1 1 auto!important;min-height:0!important;
+ width:100%!important;max-width:100%!important;height:auto!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ padding:0!important;margin:0!important;overflow:hidden!important;
+}
+.pac-mobile canvas#game {
+ flex:none!important;display:block!important;
+ width:min(100vw,calc((100dvh - 76px - 186px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 0.9032258))!important;
+ height:auto!important;aspect-ratio:560/620!important;max-width:100vw!important;max-height:100%!important;
+ object-fit:contain!important;margin:auto!important;
+}
+.pac-mobile #pac-touch-controls {
+ position:relative!important;inset:auto!important;left:auto!important;right:auto!important;
+ top:auto!important;bottom:auto!important;order:2!important;flex:0 0 182px!important;
+ height:182px!important;min-height:182px!important;width:100%!important;margin:0!important;
+ display:flex!important;align-items:center!important;justify-content:space-between!important;
+ padding:10px max(10px,env(safe-area-inset-right)) 10px max(10px,env(safe-area-inset-left))!important;
+}
+.pac-mobile #pac-mobile-menu {top:4px!important;right:max(9px,env(safe-area-inset-right))!important;position:absolute!important;}
+.pac-mobile #pac-touch-controls .pac-actions {margin:26px 0 0!important;}
+.pac-mobile .overlay {
+ position:fixed!important;inset:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)!important;
+ z-index:120!important;width:100vw!important;height:auto!important;
+ display:none;overflow-y:auto!important;overscroll-behavior:contain!important;
+ align-items:flex-start!important;justify-content:center!important;
+ padding:10px max(8px,env(safe-area-inset-right)) 16px max(8px,env(safe-area-inset-left))!important;
+}
+.pac-mobile .overlay.show {display:flex!important;}
+.pac-mobile .overlay .panel {
+ width:min(96vw,520px)!important;max-width:100%!important;max-height:none!important;
+ min-height:0!important;overflow:visible!important;margin:auto!important;
+ padding:clamp(10px,3vw,20px)!important;box-sizing:border-box!important;
+}
+.pac-mobile .overlay .btn {max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important;}
+.pac-mobile .overlay .btn-row {display:flex!important;flex-wrap:wrap!important;gap:5px!important;}
+.pac-mobile .overlay .hs-row {grid-template-columns:24px minmax(0,1fr) 38px 70px!important;gap:3px!important;}
+.pac-mobile body:has(.overlay.show) #pac-touch-controls {pointer-events:none!important;opacity:.3!important;}
+@media(max-width:370px), (max-height:740px){
+ .pac-mobile #hud {height:68px!important;min-height:68px!important;max-height:68px!important;grid-template-rows:repeat(2,30px)!important;}
+ .pac-mobile #hud .hud-block {height:29px!important;}
+ .pac-mobile #pac-touch-controls {height:158px!important;min-height:158px!important;flex-basis:158px!important;}
+ .pac-mobile #pac-joystick {width:min(34vw,128px)!important;height:min(34vw,128px)!important;}
+ .pac-mobile #pac-touch-controls .pac-actions {grid-template-rows:repeat(2,51px)!important;gap:5px!important;}
+ .pac-mobile #pac-touch-controls .pac-actions button {min-height:51px!important;}
+ .pac-mobile canvas#game {width:min(100vw,calc((100dvh - 68px - 162px - env(safe-area-inset-top) - env(safe-area-inset-bottom))*.9032258))!important;}
+}
+
+/* Android media controls — settings panel and safe top audio shortcuts */
+.pac-mobile #pac-touch-controls .pac-quick-audio {
+ position:absolute;right:max(10px,env(safe-area-inset-right));top:4px;
+ display:flex;gap:7px;align-items:center;z-index:2;pointer-events:auto;
+}
+.pac-mobile #pac-touch-controls .pac-quick-audio button {
+ position:relative!important;inset:auto!important;
+ width:36px!important;height:32px!important;min-width:36px!important;min-height:32px!important;
+ padding:0!important;font-size:19px!important;border:1px solid #648df0;
+ border-radius:8px;color:#fff;background:#1b3065;
+}
+.pac-mobile #pac-touch-controls .pac-actions {margin-top:30px!important;}
+.pac-mobile #pac-mobile-music-settings {
+ display:block;width:100%;margin:12px 0 8px;padding:10px;
+ border:1px solid #435b99;border-radius:12px;background:#0c1437;
+}
+.pac-mobile #pac-mobile-music-settings h3 {font-size:15px;color:#ffd24a;margin-bottom:8px;}
+.pac-mobile #pac-mobile-music-settings #media-panel {
+ display:block!important;width:100%!important;max-width:100%!important;
+ position:static!important;max-height:none!important;overflow:visible!important;
+ padding:4px!important;margin:0!important;background:transparent!important;
+}
+.pac-mobile #pac-mobile-music-settings .media-input {display:block;width:100%!important;min-width:0;max-width:100%;font-size:16px;}
+.pac-mobile #pac-mobile-music-settings .media-row {display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.pac-mobile #pac-mobile-music-settings .media-row .btn {flex:1 1 auto;font-size:12px;padding:9px 10px;margin:2px;}
+.pac-mobile #pac-mobile-music-settings #yt-wrap:not([hidden]) {display:block;min-height:200px;width:100%;}
+.pac-mobile #pac-mobile-music-settings #yt-player {width:100%;min-height:200px;}
+
+/* Android arcade polish: speech banner and worldwide champion */
+.pac-mobile #pac-mobile-speech {
+ order:1;flex:none;min-height:42px;max-height:68px;width:100%;
+ display:flex;align-items:center;justify-content:center;text-align:center;
+ padding:5px 12px;border:2px solid #358cff;border-radius:10px;
+ background:linear-gradient(95deg,#09245b,#051339);
+ color:#ffdf55;font-size:clamp(12px,3.5vw,19px);font-weight:900;
+ line-height:1.25;overflow-wrap:anywhere;overflow-y:auto;
+ text-shadow:0 0 7px #167cff;box-sizing:border-box;
+}
+.pac-mobile #pac-mobile-speech.speaking {color:#fff;}
+.pac-mobile #scene {order:2!important;}
+.pac-mobile #pac-mobile-record {
+ order:3;flex:none;min-height:65px;width:calc(100% - 12px);margin:3px 6px;
+ padding:7px 10px;display:flex;gap:9px;align-items:center;
+ border-radius:12px;border:2px solid #2e82ff;
+ background:linear-gradient(100deg,#0b2c69,#051436);
+ box-sizing:border-box;color:#fff;overflow:hidden;
+}
+.pac-mobile .pac-rank-cup {font-size:30px;flex:none;}
+.pac-mobile .pac-rank-avatar {flex:none;width:43px;height:43px;border-radius:8px;display:grid;place-items:center;overflow:hidden;background:#152950;border:1px solid #fcd247;}
+.pac-mobile .pac-rank-avatar img {width:100%;height:100%;object-fit:cover;}
+.pac-mobile .pac-rank-info {display:flex;flex-direction:column;min-width:0;flex:1;gap:2px;}
+.pac-mobile .pac-rank-info strong {color:#ffd443;font-size:10px;letter-spacing:.4px;}
+.pac-mobile #pac-rank-name {font-weight:800;font-size:clamp(12px,3.3vw,17px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pac-mobile #pac-rank-points {color:#95dafa;font-size:10px;}
+.pac-mobile .pac-rank-progress {height:5px;background:#07122a;border-radius:5px;overflow:hidden;transition:opacity .3s;}
+.pac-mobile #pac-rank-progress-fill {width:0;height:100%;background:#12d6ef;transition:width .4s;}
+.pac-mobile #pac-touch-controls {order:4!important;}
+.pac-mobile #pac-touch-controls .pac-actions button:nth-child(1) {background:linear-gradient(#36d96b,#067b2d)!important;border-color:#85fd8c!important;}
+.pac-mobile #pac-touch-controls .pac-actions button:nth-child(2) {background:linear-gradient(#3999ff,#075bb3)!important;border-color:#7bc5ff!important;}
+.pac-mobile #pac-touch-controls .pac-actions button:nth-child(3) {background:linear-gradient(#ffe15e,#ce8200)!important;border-color:#ffe776!important;color:#281a00!important;}
+.pac-mobile #pac-touch-controls .pac-actions button:nth-child(4) {background:linear-gradient(#ff6161,#bc1736)!important;border-color:#ff9a9a!important;}
+.pac-mobile canvas#game {width:min(100vw,calc((100dvh - 76px - 42px - 70px - 186px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * .9032258))!important;}
+@media(max-width:370px),(max-height:740px){
+ .pac-mobile #pac-mobile-speech {min-height:36px;max-height:52px;}
+ .pac-mobile #pac-mobile-record {min-height:55px;padding:4px 7px;}
+ .pac-mobile canvas#game {width:min(100vw,calc((100dvh - 68px - 36px - 59px - 162px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * .9032258))!important;}
+}
+
+/* Shared UI polish: same readable arcade visual language on both platforms. */
+#hud .hud-value{font-variant-numeric:tabular-nums;}
+#hud .hud-block{min-width:0;box-sizing:border-box;}
+#hud .hud-label,#hud .hud-value{overflow-wrap:anywhere;}
+.overlay .panel{box-sizing:border-box;max-width:min(96vw,580px);}
+.overlay .panel input,.overlay .panel select,.overlay .panel button{box-sizing:border-box;}
+.overlay .panel .media-row,.overlay .panel .btn-row{flex-wrap:wrap;}
+.overlay .panel input[type="text"],.overlay .panel input[type="url"]{max-width:100%;}
+@media(max-width:620px){
+ .overlay .panel{max-width:calc(100vw - 16px);max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);overflow-y:auto;}
+}
+/* Android: safe sizing by available game viewport, without adding fixed dead zones. */
+.pac-mobile #game-wrap { box-sizing:border-box; }
+.pac-mobile #game-col {box-sizing:border-box;}
+.pac-mobile #scene {max-height:100%;min-height:0;}
+.pac-mobile #scene canvas#game {max-height:100%;object-fit:contain;}
+.pac-mobile #pac-touch-controls {box-sizing:border-box;touch-action:none;}
+.pac-mobile #pac-touch-controls .pac-actions button {touch-action:none;user-select:none;-webkit-user-select:none;}
+.pac-mobile .overlay.show{overscroll-behavior:contain;}
+.pac-mobile .overlay.show .panel{max-width:calc(100vw - 16px)!important;min-width:0!important;}
+.pac-mobile .overlay.show .panel input,.pac-mobile .overlay.show .panel button{max-width:100%;}
+
+/* Arcade visual pass — shared HUD / dialogues, lightweight GPU-free effects */
+#hud .hud-block { transition: background-color .18s ease, border-color .18s ease; }
+#hud .hud-value.gold { text-shadow: 0 0 9px rgba(255,212,58,.36); }
+#hud .hud-value.ammo { filter: drop-shadow(0 0 3px rgba(83,177,255,.4)); }
+.pac-mobile #pac-mobile-speech.speaking {
+ border-color:#69b8ff;
+ box-shadow:inset 0 0 14px rgba(37,118,255,.16),0 0 9px rgba(37,118,255,.22);
+ animation:pac-dialog-in .22s ease-out;
+}
+@keyframes pac-dialog-in {
+ from {opacity:.68;filter:brightness(.82)}
+ to {opacity:1;filter:brightness(1)}
+}
+@media(prefers-reduced-motion: reduce) {
+ .pac-mobile #pac-mobile-speech.speaking {animation:none;}
+ #hud .hud-block {transition:none;}
+}
+
+/* Shared achievements and arcade ambience */
+#pac-achievements {margin:12px 0;padding:12px;border:1px solid #3c6db8;border-radius:14px;background:linear-gradient(135deg,#0a1638,#101d49);color:#fff;}
+#pac-achievements h3 {color:#ffd35a;font-size:16px;margin:0 0 10px;}
+#pac-achievement-list {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,185px),1fr));gap:8px;}
+.pac-achievement-row {display:flex;flex-direction:column;gap:4px;min-width:0;padding:9px;border:1px solid #344b83;border-radius:10px;background:#0c214f;overflow-wrap:anywhere;}
+.pac-achievement-row strong {color:#ffdb73;font-size:13px;}
+.pac-achievement-row span,.pac-achievement-row small {font-size:11px;color:#c6d8fc;}
+#pac-achievement-toast {position:fixed;top:max(65px,env(safe-area-inset-top));left:50%;transform:translateX(-50%) translateY(-16px);opacity:0;pointer-events:none;z-index:9999;width:min(90vw,440px);padding:12px 16px;border:2px solid #f8d050;border-radius:12px;text-align:center;font-weight:900;color:#ffdf63;background:linear-gradient(135deg,#0d2357,#141334);box-shadow:0 0 24px #e8ab2860;transition:opacity .22s,transform .22s;}
+#pac-achievement-toast.show {opacity:1;transform:translateX(-50%) translateY(0);}
+#scene {isolation:isolate;}
+.pac-mobile #pac-achievements {padding:8px;}
+.pac-mobile #pac-achievement-list {grid-template-columns:repeat(2,minmax(0,1fr));}
+@media(max-width:355px){.pac-mobile #pac-achievement-list{grid-template-columns:1fr;}}
+@media(prefers-reduced-motion:reduce){#pac-achievement-toast{transition:none;}}

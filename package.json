@@ -47,7 +47,12 @@
       "icons/**/*",
       "electron/**/*",
       "package.json",
-      "leaderboard.js"
+      "leaderboard.js",
+      "dialogues.js",
+      "achievements.js",
+      "android-record.js",
+      "mobile-controls.js",
+      "android-updater.js"
     ],
     "win": {
       "target": [
