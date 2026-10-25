@@ -23,12 +23,12 @@ jobs:
           test -d "$ANDROID_HOME/cmdline-tools" || exit 1
           echo "Android SDK: $ANDROID_HOME"
       - name: Install Capacitor tooling
-        run: npm install --no-save --no-package-lock @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+        run: npm install --no-save --no-package-lock @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7 @capacitor/browser@7
       - name: Stage game assets
         shell: bash
         run: |
           mkdir -p web/icons
-          cp index.html style.css game.js audio.js maze.js settings.js leaderboard.js mobile-controls.js web/
+          cp index.html style.css game.js audio.js maze.js settings.js leaderboard.js mobile-controls.js android-updater.js web/
           cp Pac-Jhow.mp3 Pac-Jhow-2.mp3 pacman.ico web/
           cp -R icons/. web/icons/
       - name: Generate Android project
@@ -43,16 +43,16 @@ jobs:
         working-directory: android
         run: bash ./gradlew assembleDebug --no-daemon
       - name: Name Android APK for release
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk PAC-JHOW-Android-1.1.0-beta.apk
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk PAC-JHOW-Android-1.1.1-beta.apk
       - name: Publish downloadable Android beta
         if: github.ref == 'refs/heads/feat/android-capacitor-1.1.0'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v1.1.0-android-beta PAC-JHOW-Android-1.1.0-beta.apk \
+          gh release create v1.1.1-android-beta PAC-JHOW-Android-1.1.0-beta.apk \
             --target "$GITHUB_SHA" \
-            --title "PAC-JHOW Android 1.1.0 Beta" \
-            --notes "Primeira versao Android compartilhavel: alavanca virtual, botoes de acao, musica MP3 local e ranking. APK de teste assinado para desenvolvimento; futuras atualizacoes podem exigir reinstalacao. Consulte INSTALAR-PAC-JHOW-ANDROID.txt no repositorio." \
+            --title "PAC-JHOW Android 1.1.1 Beta" \
+            --notes "Atualizacao Android com consulta automatica ao GitHub: alavanca virtual, botoes de acao, musica MP3 local e ranking. APK de teste assinado para desenvolvimento; futuras atualizacoes podem exigir reinstalacao. Consulte INSTALAR-PAC-JHOW-ANDROID.txt no repositorio." \
             --prerelease
       - name: Upload Android APK
         uses: actions/upload-artifact@v4
