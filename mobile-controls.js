@@ -2,6 +2,24 @@
 (() => {
   if (!/Android/i.test(navigator.userAgent)) return;
   document.documentElement.classList.add("pac-mobile");
+  const speechBar=document.createElement("div");
+  speechBar.id="pac-mobile-speech";
+  speechBar.setAttribute("aria-live","polite");
+  speechBar.textContent="🎮 PAC-JHOW";
+  const hud=document.getElementById("hud");
+  if(hud)hud.insertAdjacentElement("afterend",speechBar);
+  const record=document.createElement("section");
+  record.id="pac-mobile-record";
+  record.innerHTML='<span class="pac-rank-cup">🏆</span><div class="pac-rank-avatar" aria-hidden="true">👑</div><div class="pac-rank-info"><strong>RECORDE MUNDIAL</strong><span id="pac-rank-name">Carregando recordes...</span><small id="pac-rank-points"></small><div class="pac-rank-progress"><div id="pac-rank-progress-fill"></div></div></div>';
+  const scene=document.getElementById("scene");
+  if(scene)scene.insertAdjacentElement("afterend",record);
+  function displaySpeech(){
+    const speech=typeof game!=="undefined" && game.speech;
+    if(speech&&speech.t>0&&speech.text){speechBar.textContent="💬 "+speech.text;speechBar.classList.add("speaking");}
+    else {speechBar.textContent="🎮 PAC-JHOW";speechBar.classList.remove("speaking");}
+    requestAnimationFrame(displaySpeech);
+  }
+  requestAnimationFrame(displaySpeech);
   const controls=document.createElement("nav");
   controls.id="pac-touch-controls";
   controls.setAttribute("aria-label","Controles Android");
@@ -11,9 +29,9 @@
     </div>
     <div class="pac-actions">
       <button type="button" data-key="c">CORRER</button>
-      <button type="button" data-key=" ">TIRO</button>
-      <button type="button" data-key="b">BOMBA</button>
       <button type="button" data-key="p">PAUSA</button>
+      <button type="button" data-key="b">BOMBA</button>
+      <button type="button" data-key=" ">TIRO</button>
     </div>
     <div class="pac-quick-audio"><button type="button" id="pac-mobile-next" aria-label="Próxima música">⏭</button><button type="button" id="pac-mobile-mute" aria-label="Silenciar música">🔊</button><button type="button" id="pac-mobile-menu" aria-label="Configurações">⚙</button></div>`;
   document.getElementById("game-col").appendChild(controls);
