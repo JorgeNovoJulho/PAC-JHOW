@@ -41,7 +41,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p web/icons
-          cp index.html style.css game.js dialogues.js audio.js maze.js settings.js leaderboard.js mobile-controls.js android-updater.js android-record.js web/
+          cp index.html style.css game.js dialogues.js achievements.js audio.js maze.js settings.js leaderboard.js mobile-controls.js android-updater.js android-record.js web/
           cp Pac-Jhow.mp3 Pac-Jhow-2.mp3 pacman.ico web/
           cp -R icons/. web/icons/
       - name: Generate Android project
