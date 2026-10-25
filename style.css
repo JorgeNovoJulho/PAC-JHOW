@@ -921,3 +921,18 @@ canvas#game {
  .pac-mobile #pac-mobile-speech.speaking {animation:none;}
  #hud .hud-block {transition:none;}
 }
+
+/* Shared achievements and arcade ambience */
+#pac-achievements {margin:12px 0;padding:12px;border:1px solid #3c6db8;border-radius:14px;background:linear-gradient(135deg,#0a1638,#101d49);color:#fff;}
+#pac-achievements h3 {color:#ffd35a;font-size:16px;margin:0 0 10px;}
+#pac-achievement-list {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,185px),1fr));gap:8px;}
+.pac-achievement-row {display:flex;flex-direction:column;gap:4px;min-width:0;padding:9px;border:1px solid #344b83;border-radius:10px;background:#0c214f;overflow-wrap:anywhere;}
+.pac-achievement-row strong {color:#ffdb73;font-size:13px;}
+.pac-achievement-row span,.pac-achievement-row small {font-size:11px;color:#c6d8fc;}
+#pac-achievement-toast {position:fixed;top:max(65px,env(safe-area-inset-top));left:50%;transform:translateX(-50%) translateY(-16px);opacity:0;pointer-events:none;z-index:9999;width:min(90vw,440px);padding:12px 16px;border:2px solid #f8d050;border-radius:12px;text-align:center;font-weight:900;color:#ffdf63;background:linear-gradient(135deg,#0d2357,#141334);box-shadow:0 0 24px #e8ab2860;transition:opacity .22s,transform .22s;}
+#pac-achievement-toast.show {opacity:1;transform:translateX(-50%) translateY(0);}
+#scene {isolation:isolate;}
+.pac-mobile #pac-achievements {padding:8px;}
+.pac-mobile #pac-achievement-list {grid-template-columns:repeat(2,minmax(0,1fr));}
+@media(max-width:355px){.pac-mobile #pac-achievement-list{grid-template-columns:1fr;}}
+@media(prefers-reduced-motion:reduce){#pac-achievement-toast{transition:none;}}
