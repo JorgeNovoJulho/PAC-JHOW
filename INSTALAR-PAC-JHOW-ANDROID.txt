@@ -1,7 +1,7 @@
 PAC-JHOW - GUIA DE INSTALACAO NO ANDROID
-Versao: Android 1.1.0 beta
-Pagina oficial: https://github.com/JorgeNovoJulho/PAC-JHOW/releases/tag/v1.1.0-android-beta
-Download direto: https://github.com/JorgeNovoJulho/PAC-JHOW/releases/download/v1.1.0-android-beta/PAC-JHOW-Android-1.1.0-beta.apk
+Versao: Android 1.1.1 beta
+Pagina oficial: https://github.com/JorgeNovoJulho/PAC-JHOW/releases/tag/v1.1.1-android-beta
+Download direto: https://github.com/JorgeNovoJulho/PAC-JHOW/releases/download/v1.1.1-android-beta/PAC-JHOW-Android-1.1.1-beta.apk
 
 ANTES DE INSTALAR
 - Android: telefone ou tablet com sistema Android compativel.
@@ -22,7 +22,7 @@ PASSO A PASSO
 7) Depois de instalar, desative novamente "Permitir desta fonte", se tiver ativado.
 
 SE DER ERRO "APP NAO INSTALADO"
-- A versao anterior pode estar assinada com outra chave debug. A desinstalacao pode apagar dados locais (progresso, records e MP3 personalizado).
+- A versao anterior pode estar assinada com outra chave debug. O Android exige assinatura compativel para instalar por cima, mesmo ao baixar uma nova versao. A desinstalacao pode apagar dados locais (progresso, records e MP3 personalizado).
 - Guarde dados importantes primeiro; depois desinstale a versao antiga e instale o novo APK.
 - Verifique espaco de armazenamento e compatibilidade do Android.
 
