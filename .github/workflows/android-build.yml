@@ -49,6 +49,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          if gh release view v1.1.1-android-beta >/dev/null 2>&1; then
+            echo "Release 1.1.1 ja publicada; preservando o APK e sua assinatura."
+            exit 0
+          fi
           gh release create v1.1.1-android-beta PAC-JHOW-Android-1.1.1-beta.apk \
             --target "$GITHUB_SHA" \
             --title "PAC-JHOW Android 1.1.1 Beta" \
