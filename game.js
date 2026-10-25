@@ -619,6 +619,7 @@ function eatPelletAt() {
     game.grid[r][c] = " ";
     addScore(10);
     game.dotsEaten++;
+    window.PAC_ACHIEVEMENTS?.add("pellet");
     // Small, throttled pickup sparkle; shared on desktop and Android.
     if (game.dotsEaten % 4 === 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches)
       spawnBurst(c + .5, r + .5, "#ffe598", 3, 1.4);
@@ -627,6 +628,7 @@ function eatPelletAt() {
     game.grid[r][c] = " ";
     addScore(50);
     game.dotsEaten++;
+    window.PAC_ACHIEVEMENTS?.add("pellet");
     activateFright();
     if (window.PAC_SAY_EVENT) window.PAC_SAY_EVENT("powerUp"); else say("Sai correndo...");
     fam("powerUp");
@@ -839,6 +841,7 @@ function updateMissile(dt) {
         spawnBurst(g.x, g.y, "#9fd8ff", 20, 3.8);
         addScore(100);
         addFloating(g.x, g.y, 100, "#bfe9ff");
+        window.PAC_ACHIEVEMENTS?.add("ghost");
         g.state = "eyes";
         g.speed = EYES_SPEED;
         g.eyesT = 0;
@@ -976,6 +979,7 @@ function updateBombs2(dt) {
       if (dist(b.x, b.y, g.x, g.y) < 0.6) {
         game.bombs.splice(i, 1);
         addBlastRing(b.x,b.y);
+        window.PAC_ACHIEVEMENTS?.add("bomb");
         spawnBurst(b.x, b.y, "#ff9d3d", 30, 4.5);
         spawnBurst(b.x, b.y, "#fff0b0", 14, 3);
         fam("bomb");
@@ -1545,6 +1549,7 @@ function update(dt) {
 function checkLevelClear() {
   if (game.dotsEaten >= game.dotsTotal) {
     game.state = "levelClear";
+    window.PAC_ACHIEVEMENTS?.add("level");
     game.clearT = 2.2;
     if(window.PAC_SAY_EVENT)window.PAC_SAY_EVENT("victory",2.2);
     const bonus = 1000 + game.level * 100;
