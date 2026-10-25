@@ -1,7 +1,17 @@
 {
- "name": "pac-jhow-ranking",
- "main": "src/worker.js",
- "compatibility_date": "2026-10-01",
- "triggers": { "crons": ["*/5 * * * *"] },
- "d1_databases": [{"binding":"DB","database_name":"pac-jhow-ranking","database_id":"REPLACE_WITH_D1_DATABASE_ID"}]
+  "name": "pac-jhow-ranking",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-01",
+  "triggers": {
+    "crons": [
+      "*/5 * * * *"
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "pac-jhow-ranking",
+      "database_id": "fe02d1e5-6480-4237-acec-a69ec5b110f9"
+    }
+  ]
 }
