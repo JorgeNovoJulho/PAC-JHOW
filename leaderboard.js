@@ -57,6 +57,57 @@
       line("Ranking mundial indisponível no momento. Os recordes locais continuam disponíveis.");
     }
   }
+
+  // A URL é publicada separadamente para ativar o serviço sem republicar o instalador.
+  const CONFIG_URL = "https://raw.githubusercontent.com/JorgeNovoJulho/PAC-JHOW/main/data/leaderboard-config.json";
+  const QUEUE_KEY = "pac-jhow-pending-global-scores";
+  let submissionUrl = null;
+  function getQueue() {
+    try { const q = JSON.parse(localStorage.getItem(QUEUE_KEY)); return Array.isArray(q) ? q.slice(0, 20) : []; }
+    catch (_) { return []; }
+  }
+  function putQueue(q) { try { localStorage.setItem(QUEUE_KEY, JSON.stringify(q.slice(-20))); } catch (_) {} }
+  function submit(name, score, level) {
+    if (!Number.isSafeInteger(score) || score <= 0 || !Number.isInteger(level) || level < 1 || level > 20) return;
+    const q = getQueue();
+    q.push({id: crypto.randomUUID(), name: String(name).trim().slice(0, 12) || "Jogador", score, level});
+    putQueue(q);
+    flush();
+  }
+  let flushing = false;
+  async function flush() {
+    if (!submissionUrl || flushing) return;
+    flushing = true;
+    try {
+      const q = getQueue();
+      while(q.length) {
+        const response = await fetch(submissionUrl, {
+          method: "POST", headers: {"Content-Type":"application/json"},
+          body: JSON.stringify(q[0])
+        });
+        if (!response.ok && response.status !== 409 && response.status !== 400) break;
+        q.shift();
+        putQueue(q);
+      }
+    } catch (_) { /* offline: retain queue */ }
+    finally { flushing = false; }
+  }
+  async function loadConfig() {
+    try {
+      const response = await fetch(CONFIG_URL + "?t=" + Math.floor(Date.now()/INTERVAL), {cache:"no-store"});
+      if (!response.ok) return;
+      const cfg = await response.json();
+      if (typeof cfg.submissionUrl === "string") {
+        const url = new URL(cfg.submissionUrl);
+        if (url.protocol === "https:" && url.pathname.endsWith("/scores")) submissionUrl = url.href;
+      }
+      await flush();
+    } catch (_) { /* disabled or offline */ }
+  }
+  window.PAC_LEADERBOARD = Object.freeze({submit, refresh: () => refresh()});
+  loadConfig();
+  window.addEventListener("online", () => { loadConfig(); refresh(); });
+  setInterval(() => { loadConfig(); }, INTERVAL);
   refresh();
   setInterval(refresh, INTERVAL);
 })();
