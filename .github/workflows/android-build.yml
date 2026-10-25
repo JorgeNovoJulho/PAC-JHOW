@@ -18,7 +18,10 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-      - uses: android-actions/setup-android@v3
+      - name: Verify preinstalled Android SDK
+        run: |
+          test -d "$ANDROID_HOME/cmdline-tools" || exit 1
+          echo "Android SDK: $ANDROID_HOME"
       - name: Install Capacitor tooling
         run: npm install --no-save --no-package-lock @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
       - name: Stage game assets
