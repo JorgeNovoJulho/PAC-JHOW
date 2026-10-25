@@ -20,10 +20,18 @@
     </div>
     <button type="button" id="pac-mobile-menu" aria-label="Configurações">⚙</button>`;
   document.body.appendChild(controls);
+  const sideActions = document.createElement("div");
+  sideActions.className = "pac-side-actions";
+  controls.appendChild(sideActions);
+  const actions = controls.querySelector(".pac-actions");
+  for(const key of ["c","b"]) {
+    const actionButton = actions.querySelector(`[data-key="${key}"]`);
+    if(actionButton) sideActions.appendChild(actionButton);
+  }
   const rotate = document.createElement("div");
   rotate.id = "pac-rotate";
   rotate.setAttribute("role", "status");
-  rotate.innerHTML = "<span>📱</span><strong>Gire o celular para jogar</strong><p>O PAC-JHOW usa a tela horizontal para mostrar o labirinto e os controles.</p>";
+  rotate.innerHTML = "<span>📱</span><strong>Gire o celular para jogar</strong><p>Use o modo retrato para visualizar o labirinto e os controles.</p>";
   document.body.appendChild(rotate);
   controls.querySelector("#pac-mobile-menu").addEventListener("click", () => {
     document.getElementById("btn-settings")?.click();
