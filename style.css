@@ -881,3 +881,25 @@ canvas#game {
  .pac-mobile #pac-mobile-record {min-height:55px;padding:4px 7px;}
  .pac-mobile canvas#game {width:min(100vw,calc((100dvh - 68px - 36px - 59px - 162px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * .9032258))!important;}
 }
+
+/* Shared UI polish: same readable arcade visual language on both platforms. */
+#hud .hud-value{font-variant-numeric:tabular-nums;}
+#hud .hud-block{min-width:0;box-sizing:border-box;}
+#hud .hud-label,#hud .hud-value{overflow-wrap:anywhere;}
+.overlay .panel{box-sizing:border-box;max-width:min(96vw,580px);}
+.overlay .panel input,.overlay .panel select,.overlay .panel button{box-sizing:border-box;}
+.overlay .panel .media-row,.overlay .panel .btn-row{flex-wrap:wrap;}
+.overlay .panel input[type="text"],.overlay .panel input[type="url"]{max-width:100%;}
+@media(max-width:620px){
+ .overlay .panel{max-width:calc(100vw - 16px);max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);overflow-y:auto;}
+}
+/* Android: safe sizing by available game viewport, without adding fixed dead zones. */
+.pac-mobile #game-wrap { box-sizing:border-box; }
+.pac-mobile #game-col {box-sizing:border-box;}
+.pac-mobile #scene {max-height:100%;min-height:0;}
+.pac-mobile #scene canvas#game {max-height:100%;object-fit:contain;}
+.pac-mobile #pac-touch-controls {box-sizing:border-box;touch-action:none;}
+.pac-mobile #pac-touch-controls .pac-actions button {touch-action:none;user-select:none;-webkit-user-select:none;}
+.pac-mobile .overlay.show{overscroll-behavior:contain;}
+.pac-mobile .overlay.show .panel{max-width:calc(100vw - 16px)!important;min-width:0!important;}
+.pac-mobile .overlay.show .panel input,.pac-mobile .overlay.show .panel button{max-width:100%;}
