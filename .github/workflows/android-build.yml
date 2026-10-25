@@ -5,7 +5,7 @@ on:
     branches:
       - feat/android-capacitor-1.1.0
 permissions:
-  contents: read
+  contents: write
 jobs:
   android:
     runs-on: ubuntu-latest
@@ -42,6 +42,18 @@ jobs:
       - name: Build test APK
         working-directory: android
         run: bash ./gradlew assembleDebug --no-daemon
+      - name: Name Android APK for release
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk PAC-JHOW-Android-1.1.0-beta.apk
+      - name: Publish downloadable Android beta
+        if: github.ref == 'refs/heads/feat/android-capacitor-1.1.0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v1.1.0-android-beta PAC-JHOW-Android-1.1.0-beta.apk \
+            --target "$GITHUB_SHA" \
+            --title "PAC-JHOW Android 1.1.0 Beta" \
+            --notes "Primeira versao Android compartilhavel: alavanca virtual, botoes de acao, musica MP3 local e ranking. APK de teste assinado para desenvolvimento; futuras atualizacoes podem exigir reinstalacao. Consulte INSTALAR-PAC-JHOW-ANDROID.txt no repositorio." \
+            --prerelease
       - name: Upload Android APK
         uses: actions/upload-artifact@v4
         with:
