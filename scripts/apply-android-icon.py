@@ -5,7 +5,24 @@ from PIL import Image
 root = Path(__file__).resolve().parents[1]
 source = root / "assets" / "android-icon.png"
 if not source.is_file():
-    raise SystemExit("Ícone ausente: adicione assets/android-icon.png antes de gerar o APK.")
+    from PIL import ImageDraw, ImageFont
+    source.parent.mkdir(parents=True, exist_ok=True)
+    img = Image.new("RGB", (512, 512), "#090d30")
+    d = ImageDraw.Draw(img)
+    for i in range(0, 512, 80):
+        d.line([(i, 0), (i, 512)], fill="#123b92", width=8)
+        d.line([(0, i), (512, i)], fill="#123b92", width=8)
+    d.ellipse((90, 65, 420, 390), fill="#ffd019", outline="#ffea7b", width=12)
+    for a in (225, 307):
+        d.ellipse((a, 160, a+65, 235), fill="white")
+        d.ellipse((a+25, 187, a+50, 217), fill="#151728")
+    d.arc((145, 155, 367, 341), 12, 159, fill="#7f1d09", width=25)
+    d.rounded_rectangle((135, 72, 382, 147), radius=25, fill="#10152e")
+    d.rounded_rectangle((80, 400, 435, 483), radius=15, fill="#dd382b", outline="#ffda4c", width=8)
+    d.text((150, 93), "PAC JHOW", fill="#ffce13", font=ImageFont.load_default(size=32))
+    d.text((116, 424), "PAC JHOW", fill="#ffffff", font=ImageFont.load_default(size=42))
+    img.save(source)
+    print("Temporary PAC-JHOW icon generated. Replace assets/android-icon.png with official art.")
 
 image = Image.open(source).convert("RGBA")
 android_res = root / "android" / "app" / "src" / "main" / "res"
