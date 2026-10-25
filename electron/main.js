@@ -102,8 +102,8 @@ function validateSettings(input) {
 
 function configureUpdater() {
   if (!app.isPackaged) return;
-  autoUpdater.autoDownload = false;
-  autoUpdater.autoInstallOnAppQuit = false;
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
   autoUpdater.allowPrerelease = false;
   autoUpdater.allowDowngrade = false;
   autoUpdater.logger = {
