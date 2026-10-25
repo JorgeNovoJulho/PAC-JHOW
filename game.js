@@ -256,7 +256,8 @@ function opposite(a, b) { return a.x === -b.x && a.y === -b.y; }
 function cellFromPos(x, y) { return { c: Math.floor(x), r: Math.floor(y) }; }
 function dist(x1, y1, x2, y2) { return Math.hypot(x1 - x2, y1 - y2); }
 function dirKey(d) { return (d.x || 0) + "," + (d.y || 0); }
-function say(text, dur) { game.speech = { text: String(text), t: dur || 1.8, max: dur || 1.8 }; }
+function say(text, dur) { game.speech = { text: String(text), t: dur || 2.8, max: dur || 2.8 }; }
+window.PAC_SAY=say;
 
 function hexToRgb(h) {
   const m = /^#?([a-f0-9]{6})$/i.exec(h || "");
