@@ -19,3 +19,7 @@ No Android, a partida usa um layout horizontal dedicado, com labirinto centraliz
 ## Layout em retrato (referência arcade)
 
 O modo retrato mantém o labirinto no alto, HUD compacto, direcional ao centro inferior, bomba/corrida à esquerda e tiro/pausa à direita. O modo paisagem anterior continua como alternativa. Testar especificamente aparelhos pequenos e a área de recortes/câmera, pois o APK ainda é beta.
+
+## Ícone oficial Android
+
+A arte oficial deve ser enviada como `assets/android-icon.png` (PNG quadrado de 512×512). O workflow executa `scripts/apply-android-icon.py` para gerar ícones padrão, redondos e adaptativos nas densidades mipmap do Android. Sem esse arquivo, o APK não será compilado, evitando distribuir o ícone genérico do Capacitor. O ícone aparecerá no launcher do dispositivo após instalar a nova compilação.
