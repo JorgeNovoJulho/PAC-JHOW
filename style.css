@@ -903,3 +903,21 @@ canvas#game {
 .pac-mobile .overlay.show{overscroll-behavior:contain;}
 .pac-mobile .overlay.show .panel{max-width:calc(100vw - 16px)!important;min-width:0!important;}
 .pac-mobile .overlay.show .panel input,.pac-mobile .overlay.show .panel button{max-width:100%;}
+
+/* Arcade visual pass — shared HUD / dialogues, lightweight GPU-free effects */
+#hud .hud-block { transition: background-color .18s ease, border-color .18s ease; }
+#hud .hud-value.gold { text-shadow: 0 0 9px rgba(255,212,58,.36); }
+#hud .hud-value.ammo { filter: drop-shadow(0 0 3px rgba(83,177,255,.4)); }
+.pac-mobile #pac-mobile-speech.speaking {
+ border-color:#69b8ff;
+ box-shadow:inset 0 0 14px rgba(37,118,255,.16),0 0 9px rgba(37,118,255,.22);
+ animation:pac-dialog-in .22s ease-out;
+}
+@keyframes pac-dialog-in {
+ from {opacity:.68;filter:brightness(.82)}
+ to {opacity:1;filter:brightness(1)}
+}
+@media(prefers-reduced-motion: reduce) {
+ .pac-mobile #pac-mobile-speech.speaking {animation:none;}
+ #hud .hud-block {transition:none;}
+}
