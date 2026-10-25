@@ -1,7 +1,7 @@
 # PAC-JHOW — Móvel Studio Edition
 
 Jogo Pac-Man para **Windows**, com 20 níveis, foto do personagem, música
-personalizada, faixa oficial **Pac-Jhow** e extras de ação. A aplicação é
+personalizada, duas faixas oficiais **Pac-Jhow** e extras de ação. A aplicação é
 instalada como um programa normal: **não é preciso abrir o navegador**.
 
 ## Instalar no Windows
@@ -46,8 +46,9 @@ usa o `INICIAR-SERVIDOR-ATUALIZACOES.bat`.
 - Balões de fala cómicos para as ações do jogo.
 - Foto do personagem persistente, emoldurada na casinha e com flash vermelho
   de 2 segundos quando o personagem morre.
-- Faixa oficial **Pac-Jhow** (MP3) como música n.º 1, tocada ao iniciar o jogo,
-  seguida das cinco faixas sintetizadas.
+- Faixa oficial **Pac-Jhow** (MP3) como música n.º 1, tocada ao iniciar o jogo.
+- Nova faixa oficial **Pac-Jhow 2** (MP3) como música n.º 2, acessível pela tecla **2** e pelo seletor de músicas.
+- Quatro faixas sintetizadas nas posições 3 a 6.
 - Música personalizada por URL, YouTube ou ficheiro local, persistente, com
   repetição automática até o utilizador escolher as músicas padrão.
 - Efeitos sonoros cómicos ativados quando há foto: tiros, bombas, morte, comer
@@ -103,6 +104,7 @@ executado automaticamente nos PCs dos jogadores.
 - `maze.js` — labirintos clássico e procedural, casa dos fantasmas.
 - `audio.js` — faixa MP3 n.º 1, música sintetizada e efeitos Web Audio.
 - `Pac-Jhow.mp3` — faixa oficial n.º 1.
+- `Pac-Jhow-2.mp3` — faixa oficial n.º 2 (deve ser adicionada antes da próxima publicação).
 - `game.js` — motor do jogo, física, IA, fotos, música e persistência.
 - `settings.js` — área ⚙️ Opções e atualizações.
 - `update-server/server.js` — servidor local de atualizações.
