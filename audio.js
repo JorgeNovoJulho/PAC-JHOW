@@ -3,7 +3,7 @@
  * -------------------------------------------------------------------------
  * Música sintetizada com sons mais "reais": pads suaves, plucks com brilho,
  * baixo quente, bateria subtil e efeitos de espaço (eco/reaverb).
- *   - 6 músicas: a faixa oficial Pac-Jhow (MP3) + 5 sintetizadas
+ *   - 6 músicas: duas faixas oficiais Pac-Jhow (MP3) + 4 sintetizadas
  *   - troca manual (⏮/⏭, teclas 1-6), botão ouvir/parar
  *   - a música NÃO para quando o personagem morre
  * =========================================================================
@@ -56,21 +56,9 @@ const AudioSys = (function () {
       chords: [], lead: [], counter: [], bass: []
     },
     {
-      name: "Neon Rush", tempo: 134, drums: "bright", padVol: 0.12,
-      chords: [["D3", "F3", "A3"], ["Bb2", "D3", "F3"], ["F3", "A3", "C4"], ["C3", "E3", "G3"]],
-      lead: [
-        "A4", "F4", "D4", "F4", "A4", "C5", "D5", null, "E5", "D5", "C5", "A4", "F4", "D4", null, "F4",
-        "A4", null, "F4", "D4", "F4", "A4", "Bb4", "C5", "D5", "C5", "Bb4", "A4", "F4", "D4", null, null,
-        "C5", "A4", "F4", "A4", "C5", "F5", "E5", "D5", "C5", "A4", "F4", "A4", "C5", "F5", null, "E5",
-        "G4", "E4", "C4", "E4", "G4", "B4", "C5", "D5", "E5", "C5", "G4", "E4", "C4", null, null, "D5"
-      ],
-      counter: [
-        "D4", null, "A3", null, "D4", null, "F4", null, "A4", null, "F4", null, "D4", null, "A3", null,
-        "Bb3", null, "F3", null, "Bb3", null, "D4", null, "F4", null, "C4", null, "A3", null, "F3", null,
-        "A3", null, "F3", null, "A3", null, "C4", null, "F4", null, "A4", null, "F4", null, "C4", null,
-        "C4", null, "G3", null, "C4", null, "E4", null, "G4", null, "E4", null, "C4", null, "G3", null
-      ],
-      bass: [].concat(bassBar("D2", "D3"), bassBar("Bb1", "Bb2"), bassBar("F2", "F3"), bassBar("C2", "C3"))
+      // Faixa 2: música oficial fornecida pelo autor (arquivo MP3 incluído no instalador).
+      name: "Pac-Jhow 2", file: "Pac-Jhow-2.mp3", tempo: 120, drums: "none", padVol: 0,
+      chords: [], lead: [], counter: [], bass: []
     },
     {
       name: "Cyber Drive", tempo: 140, drums: "pulse", padVol: 0.12,
@@ -150,8 +138,7 @@ const AudioSys = (function () {
   /* --------------------------- Motor / espaço --------------------------- */
   let musicTimer = null, musicOn = false, nextStepTime = 0, stepIndex = 0;
 
-  // Faixa 1 é um ficheiro MP3 real (pode ser substituído no build autónomo
-  // por um data URI). As restantes continuam a ser sintetizadas.
+  // Faixas 1 e 2 são ficheiros MP3 reais. As restantes são sintetizadas.
   const assetAudio = new Audio();
   assetAudio.preload = "auto";
   assetAudio.loop = true;
