@@ -771,3 +771,44 @@ canvas#game {
  .pac-mobile #pac-touch-controls button { min-width:46px; min-height:46px; }
  .pac-mobile .pac-actions { bottom:calc(32px + env(safe-area-inset-bottom)); grid-template-columns:49px; grid-auto-rows:44px; }
 }
+
+/* Arcade joystick override for the new portrait beta */
+.pac-mobile #pac-touch-controls .pac-dpad,
+.pac-mobile #pac-touch-controls .pac-side-actions {display:none!important;}
+.pac-mobile #pac-joystick {
+ position:absolute;left:max(14px,env(safe-area-inset-left));
+ bottom:calc(19px + env(safe-area-inset-bottom));width:142px;height:142px;
+ border-radius:50%;touch-action:none;pointer-events:auto;user-select:none;
+ background:radial-gradient(circle at 36% 30%,#5269a3,#15244c 65%,#040a1f);
+ border:5px solid #768cbb;box-shadow:inset 0 5px 15px #020819,0 5px 22px #000b;
+}
+.pac-mobile .pac-stick-groove {position:absolute;inset:13px;border:2px solid #20315d;border-radius:50%;background:radial-gradient(circle,#16295d,#080d26);}
+.pac-mobile .pac-stick-knob {
+ position:absolute;top:50%;left:50%;width:63px;height:63px;border-radius:50%;
+ transform:translate(-50%,-50%);pointer-events:none;
+ background:radial-gradient(circle at 30% 25%,#ffdf91,#f63d39 36%,#9b1120 78%);
+ border:3px solid #ffad54;box-shadow:0 3px 14px #000a,inset -5px -5px 11px #75070b;
+}
+.pac-mobile #pac-joystick.active .pac-stick-knob {box-shadow:0 0 17px #f84655,0 3px 14px #000a;}
+@media(orientation:portrait){
+ .pac-mobile #pac-touch-controls {height:198px;}
+ .pac-mobile #pac-touch-controls .pac-actions {
+  right:max(12px,env(safe-area-inset-right));left:auto;
+  bottom:calc(18px + env(safe-area-inset-bottom));display:grid!important;
+  grid-template-columns:repeat(2,64px);grid-template-rows:repeat(2,64px);
+  grid-auto-rows:64px;gap:7px;
+ }
+ .pac-mobile #pac-touch-controls .pac-actions button{min-width:64px;min-height:64px;font-size:10px!important;}
+ .pac-mobile #pac-mobile-menu {top:4px;right:8px;}
+ .pac-mobile #scene {width:min(100vw,calc((100dvh - 260px)*.903226));}
+}
+@media(orientation:portrait) and (max-width:360px){
+ .pac-mobile #pac-joystick {width:122px;height:122px;left:8px;}
+ .pac-mobile .pac-stick-knob {width:57px;height:57px;}
+ .pac-mobile #pac-touch-controls .pac-actions {right:6px;grid-template-columns:repeat(2,55px);grid-template-rows:repeat(2,59px);}
+ .pac-mobile #pac-touch-controls .pac-actions button {min-width:55px;min-height:59px;}
+}
+@media(orientation:landscape){
+ .pac-mobile #pac-joystick {bottom:max(7px,env(safe-area-inset-bottom));width:123px;height:123px;}
+ .pac-mobile .pac-actions {grid-template-columns:repeat(2,65px);grid-auto-rows:56px;}
+}
