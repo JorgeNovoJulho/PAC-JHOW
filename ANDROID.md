@@ -15,3 +15,7 @@ Execute manualmente o workflow "Android APK (test build)" em Actions após integ
 ## Correção de layout mobile
 
 No Android, a partida usa um layout horizontal dedicado, com labirinto centralizado, HUD compacto superior, direcional à esquerda e ações à direita. Em retrato, aparece orientação para girar o telefone. As opções ficam acessíveis pelo ícone ⚙. O desktop mantém o layout original. Esta etapa ainda exige validação de legibilidade e interação em aparelhos reais.
+
+## Layout em retrato (referência arcade)
+
+O modo retrato mantém o labirinto no alto, HUD compacto, direcional ao centro inferior, bomba/corrida à esquerda e tiro/pausa à direita. O modo paisagem anterior continua como alternativa. Testar especificamente aparelhos pequenos e a área de recortes/câmera, pois o APK ainda é beta.
