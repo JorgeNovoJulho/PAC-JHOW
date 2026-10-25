@@ -1,7 +1,7 @@
 PAC-JHOW - GUIA DE INSTALACAO NO ANDROID
-Versao: Android 1.1.1 beta
-Pagina oficial: https://github.com/JorgeNovoJulho/PAC-JHOW/releases/tag/v1.1.1-android-beta
-Download direto: https://github.com/JorgeNovoJulho/PAC-JHOW/releases/download/v1.1.1-android-beta/PAC-JHOW-Android-1.1.1-beta.apk
+Versao: Android 1.1.2 beta
+Pagina oficial: https://github.com/JorgeNovoJulho/PAC-JHOW/releases/tag/v1.1.2-android-beta
+Download direto: https://github.com/JorgeNovoJulho/PAC-JHOW/releases/download/v1.1.2-android-beta/PAC-JHOW-Android-1.1.2-beta.apk
 
 ANTES DE INSTALAR
 - Android: telefone ou tablet com sistema Android compativel.
