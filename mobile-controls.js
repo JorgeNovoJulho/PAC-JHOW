@@ -22,7 +22,8 @@
   let pointer=null, activeKey=null;
   const stick=controls.querySelector("#pac-joystick");
   const knob=stick.querySelector(".pac-stick-knob");
-  const deadzone=0.18;
+  const deadzone=0.12;
+  const hysteresis=1.22;
   function reset(){
     if(activeKey){dispatch("keyup",activeKey);activeKey=null;}
     pointer=null;knob.style.transform="translate(-50%,-50%)";
@@ -37,7 +38,13 @@
     const scale=length>range?range/length:1;
     knob.style.transform=`translate(calc(-50% + ${dx*scale}px), calc(-50% + ${dy*scale}px))`;
     let next=null;
-    if(length>range*deadzone) next=Math.abs(dx)>Math.abs(dy)?(dx>0?"ArrowRight":"ArrowLeft"):(dy>0?"ArrowDown":"ArrowUp");
+    if(length>range*deadzone){
+      const ax=Math.abs(dx),ay=Math.abs(dy);
+      const horizontal=activeKey==="ArrowLeft"||activeKey==="ArrowRight";
+      const vertical=activeKey==="ArrowUp"||activeKey==="ArrowDown";
+      const useHorizontal=horizontal?ax*hysteresis>=ay:vertical?ax>ay*hysteresis:ax>=ay;
+      next=useHorizontal?(dx>0?"ArrowRight":"ArrowLeft"):(dy>0?"ArrowDown":"ArrowUp");
+    }
     if(next!==activeKey){
       if(activeKey)dispatch("keyup",activeKey);
       activeKey=next;
