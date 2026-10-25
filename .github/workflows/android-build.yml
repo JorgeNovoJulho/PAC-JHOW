@@ -1,4 +1,4 @@
-name: Android APK (test build)
+name: Android APK + cross-platform UI validation
 on:
   workflow_dispatch:
   push:
@@ -22,6 +22,19 @@ jobs:
         run: |
           test -d "$ANDROID_HOME/cmdline-tools" || exit 1
           echo "Android SDK: $ANDROID_HOME"
+      - name: Install UI browser test runner
+        run: |
+          npm install --no-save --no-package-lock playwright
+          npx playwright install chromium --with-deps
+      - name: Validate Android and desktop interfaces
+        run: node scripts/ui-smoke.mjs
+      - name: Upload UI screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PAC-JHOW-UI-viewport-tests
+          path: ui-smoke-results/*.png
+          if-no-files-found: ignore
       - name: Install Capacitor tooling
         run: npm install --no-save --no-package-lock @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7 @capacitor/browser@7
       - name: Stage game assets
@@ -42,22 +55,6 @@ jobs:
       - name: Build test APK
         working-directory: android
         run: bash ./gradlew assembleDebug --no-daemon
-      - name: Name Android APK for release
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk PAC-JHOW-Android-1.1.2-beta.apk
-      - name: Publish downloadable Android beta
-        if: github.ref == 'refs/heads/feat/android-capacitor-1.1.0'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          if gh release view v1.1.2-android-beta >/dev/null 2>&1; then
-            echo "Release 1.1.1 ja publicada; preservando o APK e sua assinatura."
-            exit 0
-          fi
-          gh release create v1.1.2-android-beta PAC-JHOW-Android-1.1.2-beta.apk \
-            --target "$GITHUB_SHA" \
-            --title "PAC-JHOW Android 1.1.2 Beta" \
-            --notes "Atualizacao Android com consulta automatica ao GitHub: alavanca virtual, botoes de acao, musica MP3 local e ranking. APK de teste assinado para desenvolvimento; futuras atualizacoes podem exigir reinstalacao. Consulte INSTALAR-PAC-JHOW-ANDROID.txt no repositorio." \
-            --prerelease
       - name: Upload Android APK
         uses: actions/upload-artifact@v4
         with:
