@@ -28,7 +28,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p web/icons
-          cp index.html style.css game.js audio.js maze.js settings.js leaderboard.js mobile-controls.js android-updater.js web/
+          cp index.html style.css game.js audio.js maze.js settings.js leaderboard.js mobile-controls.js android-updater.js android-record.js web/
           cp Pac-Jhow.mp3 Pac-Jhow-2.mp3 pacman.ico web/
           cp -R icons/. web/icons/
       - name: Generate Android project
@@ -43,19 +43,19 @@ jobs:
         working-directory: android
         run: bash ./gradlew assembleDebug --no-daemon
       - name: Name Android APK for release
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk PAC-JHOW-Android-1.1.1-beta.apk
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk PAC-JHOW-Android-1.1.2-beta.apk
       - name: Publish downloadable Android beta
         if: github.ref == 'refs/heads/feat/android-capacitor-1.1.0'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view v1.1.1-android-beta >/dev/null 2>&1; then
+          if gh release view v1.1.2-android-beta >/dev/null 2>&1; then
             echo "Release 1.1.1 ja publicada; preservando o APK e sua assinatura."
             exit 0
           fi
-          gh release create v1.1.1-android-beta PAC-JHOW-Android-1.1.1-beta.apk \
+          gh release create v1.1.2-android-beta PAC-JHOW-Android-1.1.2-beta.apk \
             --target "$GITHUB_SHA" \
-            --title "PAC-JHOW Android 1.1.1 Beta" \
+            --title "PAC-JHOW Android 1.1.2 Beta" \
             --notes "Atualizacao Android com consulta automatica ao GitHub: alavanca virtual, botoes de acao, musica MP3 local e ranking. APK de teste assinado para desenvolvimento; futuras atualizacoes podem exigir reinstalacao. Consulte INSTALAR-PAC-JHOW-ANDROID.txt no repositorio." \
             --prerelease
       - name: Upload Android APK
