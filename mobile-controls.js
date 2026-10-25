@@ -16,7 +16,7 @@
       <button type="button" data-key="p">PAUSA</button>
     </div>
     <button type="button" id="pac-mobile-menu" aria-label="Configurações">⚙</button>`;
-  document.body.appendChild(controls);
+  document.getElementById("game-col").appendChild(controls);
   document.getElementById("pac-mobile-menu").addEventListener("click",()=>document.getElementById("btn-settings")?.click());
   const dispatch=(type,key)=>window.dispatchEvent(new KeyboardEvent(type,{key,bubbles:true,cancelable:true}));
   let pointer=null, activeKey=null;
