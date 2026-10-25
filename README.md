@@ -6,7 +6,7 @@ instalada como um programa normal: **não é preciso abrir o navegador**.
 
 ## Instalar no Windows
 
-1. Instala o **`PAC-JHOW-Setup-1.0.1.exe`** (pasta `dist` ou a versão publicada
+1. Instala o **`PAC-JHOW-Setup-1.0.3.exe`** (pasta `dist` ou a versão publicada
    nas Releases do GitHub).
 2. Se o Windows mostrar **“O Windows protegeu o seu PC”**, clica em
    **Mais informações → Executar mesmo assim**. O instalador ainda não tem
@@ -27,9 +27,7 @@ Abre **⚙️ Opções** no canto superior direito. Podes escolher:
 - **Servidor próprio / local** — um servidor HTTPS (ou
   `http://127.0.0.1:8787/` para testes no teu PC).
 
-A aplicação Procura → mostra a versão → Transferir → **Instalar e reiniciar**.
-Nunca instala nada sem confirmação. O `latest.yml` inclui o `sha512` do
-instalador, que é verificado após a transferência.
+A aplicação verifica automaticamente atualizações ao iniciar, baixa novas versões em segundo plano e instala ao fechar o jogo normalmente. A instalação não interrompe partidas. Também é possível verificar manualmente em ⚙️ Opções.
 
 Para testar o servidor local, consulta **[ATUALIZACOES.md](ATUALIZACOES.md)** e
 usa o `INICIAR-SERVIDOR-ATUALIZACOES.bat`.

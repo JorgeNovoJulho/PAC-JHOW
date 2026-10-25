@@ -81,8 +81,8 @@
       return;
     }
     if (data.state === "available") {
-      setStatus("Nova versão " + (lastVersion ? "v" + lastVersion : "") + " disponível. Podes transferi-la agora.", "ok");
-      if (btnDownload) btnDownload.hidden = false;
+      setStatus("Nova versão " + (lastVersion ? "v" + lastVersion : "") + " disponível. Transferência automática iniciada.", "ok");
+      if (btnDownload) btnDownload.hidden = true;
       if (btnInstall) btnInstall.hidden = true;
       updateBadge(true);
       return;
@@ -101,7 +101,7 @@
       return;
     }
     if (data.state === "downloaded") {
-      setStatus("Atualização " + (lastVersion ? "v" + lastVersion + " " : "") + "transferida. Podes instalar e reiniciar.", "ok");
+      setStatus("Atualização " + (lastVersion ? "v" + lastVersion + " " : "") + "transferida. Será instalada ao fechar o jogo normalmente.", "ok");
       if (btnDownload) btnDownload.hidden = true;
       if (btnInstall) btnInstall.hidden = false;
       updateBadge(true);
