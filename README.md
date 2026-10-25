@@ -1,6 +1,6 @@
-## 📱 PAC-JHOW Android — versão 1.1.1 Beta (atual)
+## 📱 PAC-JHOW Android — versão 1.1.2 Beta (atual)
 
-**[⬇️ BAIXAR APK ANDROID 1.1.1](https://github.com/JorgeNovoJulho/PAC-JHOW/releases/download/v1.1.1-android-beta/PAC-JHOW-Android-1.1.1-beta.apk)**
+**[⬇️ BAIXAR APK ANDROID 1.1.2](https://github.com/JorgeNovoJulho/PAC-JHOW/releases/download/v1.1.2-android-beta/PAC-JHOW-Android-1.1.2-beta.apk)**
 
 [Instruções para instalar no Android](INSTALAR-PAC-JHOW-ANDROID.txt). A nova versão consulta atualizações no GitHub quando o jogo abre e disponibiliza o download; a instalação exige confirmação do Android. APK beta com assinatura de desenvolvimento: atualizar sobre uma instalação anterior pode falhar devido à diferença de assinatura, e desinstalar pode apagar dados locais.
 
