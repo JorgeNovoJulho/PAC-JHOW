@@ -686,18 +686,54 @@ canvas#game {
   #music-name { min-width: 90px; font-size: 11px; }
 }
 
-/* Touch layout for the Capacitor Android build */
-.pac-mobile body { overscroll-behavior: none; }
-.pac-mobile #game-wrap { width:100%; max-width:100%; padding:6px; box-sizing:border-box; }
-.pac-mobile #game-col { min-width:0; width:100%; }
-.pac-mobile #scene { width:100%; max-width:100%; }
-.pac-mobile #game { max-width:100%; height:auto; touch-action:none; }
-.pac-mobile #side-col { display:none; }
-.pac-mobile #site-footer { display:none; }
-.pac-mobile #pac-touch-controls { display:flex; position:sticky; bottom:0; z-index:100; justify-content:space-between; align-items:center; padding:8px max(8px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left)); background:#070a26; touch-action:none; gap:12px; }
-.pac-dpad,.pac-actions { display:flex; flex-direction:column; gap:5px; }
-.pac-dpad>button { align-self:center; }
-.pac-dpad>div { display:flex; gap:5px; }
-#pac-touch-controls button { min-width:48px; min-height:48px; border-radius:12px; border:1px solid #568aff; background:#142454; color:white; font-weight:700; touch-action:none; user-select:none; }
-.pac-actions { display:grid; grid-template-columns:repeat(2,minmax(62px,1fr)); }
-.pac-actions button { font-size:12px; }
+
+/* PAC-JHOW Android: layout de jogo independente do desktop.
+   As regras ficam restritas à classe aplicada no Android. */
+.pac-mobile, .pac-mobile body { width:100%; height:100%; min-height:0; overflow:hidden; }
+.pac-mobile body { display:block; padding:0; margin:0; overscroll-behavior:none; background:#070a26; }
+.pac-mobile #game-wrap { position:fixed; inset:0; max-width:none; width:100%; height:100%; display:block; margin:0; padding:0; overflow:hidden; }
+.pac-mobile #game-col { position:absolute; inset:0; width:100%; height:100%; gap:0; display:block; min-width:0; }
+.pac-mobile #site-header, .pac-mobile #side-col, .pac-mobile #site-footer { display:none !important; }
+.pac-mobile #hud { position:absolute; top:0; left:0; width:100%; height:38px; display:flex; flex-wrap:nowrap; align-items:center; justify-content:center; gap:3px; padding:2px 8px; z-index:20; overflow:hidden; background:rgba(5,9,34,.94); border-bottom:1px solid #2e417e; }
+.pac-mobile #hud .hud-block { flex:1 1 0; width:0; min-width:0; padding:0 2px; margin:0; box-shadow:none; border:0; background:transparent; text-align:center; }
+.pac-mobile #hud .hud-label { font-size:8px; letter-spacing:0; line-height:12px; }
+.pac-mobile #hud .hud-value { font-size:13px; line-height:18px; min-height:18px; white-space:nowrap; overflow:hidden; }
+.pac-mobile #hud .hud-value.ammo { font-size:11px; }
+.pac-mobile #scene { position:absolute; left:50%; top:calc(50% + 18px); transform:translate(-50%,-50%); width:auto; height:auto; max-width:none; max-height:none; margin:0; padding:0; overflow:visible; background:transparent; border:0; box-shadow:none; }
+.pac-mobile canvas#game { display:block; width:auto; height:min(calc(100dvh - 52px), calc((100dvw - 350px) * 1.10714)); max-width:none; max-height:none; margin:0; touch-action:none; }
+.pac-mobile .overlay { position:absolute; inset:0; z-index:55; align-items:center; justify-content:center; overflow:auto; padding:4px; }
+.pac-mobile .overlay .panel { width:min(92vw,510px); max-height:calc(100dvh - 54px); overflow:auto; padding:12px; margin:0; }
+.pac-mobile .panel-title { font-size:22px; }
+.pac-mobile .panel-sub { font-size:11px; margin-bottom:6px; }
+.pac-mobile .controls-info { display:none; }
+.pac-mobile .highscores { margin-top:8px; }
+.pac-mobile .highscores h3 { font-size:11px; margin-bottom:3px; }
+.pac-mobile .hs-row { font-size:11px; padding:3px 5px; }
+.pac-mobile .hint { margin-top:3px; font-size:11px; }
+.pac-mobile #pac-touch-controls { position:fixed; inset:0; z-index:30; pointer-events:none; padding:0; margin:0; }
+.pac-mobile #pac-touch-controls button { pointer-events:auto; min-width:48px; min-height:48px; border-radius:13px; border:1px solid #6496ff; box-shadow:0 2px 9px #02091b; color:#fff; font-size:14px; font-weight:800; background:#172a66; touch-action:none; user-select:none; -webkit-user-select:none; }
+.pac-mobile #pac-touch-controls button:active { background:#3155b4; }
+.pac-mobile .pac-dpad { position:absolute; left:max(8px,env(safe-area-inset-left)); bottom:max(8px,env(safe-area-inset-bottom)); display:grid; grid-template-columns:repeat(3,48px); grid-template-rows:repeat(3,48px); gap:3px; }
+.pac-mobile .pac-dpad button[data-key="ArrowUp"] { grid-column:2; grid-row:1; }
+.pac-mobile .pac-dpad button[data-key="ArrowLeft"] { grid-column:1; grid-row:2; }
+.pac-mobile .pac-dpad button[data-key="ArrowDown"] { grid-column:2; grid-row:2; }
+.pac-mobile .pac-dpad button[data-key="ArrowRight"] { grid-column:3; grid-row:2; }
+.pac-mobile .pac-actions { position:absolute; right:max(8px,env(safe-area-inset-right)); bottom:max(10px,env(safe-area-inset-bottom)); display:grid; grid-template-columns:repeat(2,64px); grid-auto-rows:48px; gap:7px; }
+.pac-mobile .pac-actions button { font-size:11px !important; }
+.pac-mobile #pac-mobile-menu { position:absolute; top:42px; right:max(8px,env(safe-area-inset-right)); width:48px; height:42px; font-size:11px !important; }
+.pac-mobile #pac-rotate { display:none; position:fixed; inset:0; z-index:999; background:#070a26; color:white; align-items:center; justify-content:center; flex-direction:column; text-align:center; padding:24px; gap:15px; }
+.pac-mobile #pac-rotate strong { font-size:20px; }
+.pac-mobile #pac-rotate span { font-size:50px; }
+@media (orientation:portrait) {
+ .pac-mobile #pac-rotate { display:flex; }
+}
+@media (orientation:landscape) and (max-height:390px) {
+ .pac-mobile #hud { height:30px; }
+ .pac-mobile #hud .hud-label { font-size:7px; line-height:10px; }
+ .pac-mobile #hud .hud-value { font-size:11px; line-height:16px; min-height:16px; }
+ .pac-mobile canvas#game { height:min(calc(100dvh - 38px), calc((100dvw - 330px) * 1.10714)); }
+ .pac-mobile #scene { top:calc(50% + 14px); }
+ .pac-mobile .pac-dpad { grid-template-columns:repeat(3,44px); grid-template-rows:repeat(3,44px); }
+ .pac-mobile #pac-touch-controls button { min-width:44px; min-height:44px; }
+ .pac-mobile .pac-actions { grid-template-columns:repeat(2,59px); grid-auto-rows:44px; }
+}
