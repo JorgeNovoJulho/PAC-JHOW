@@ -33,12 +33,14 @@
     mobileMusic.appendChild(mediaPanel);
     settingsPanel.insertBefore(mobileMusic,document.getElementById("btn-settings-close"));
     const url=document.getElementById("music-url");
-    if(url)url.placeholder="Link de áudio direto (.mp3) ou YouTube (player visível)";
+    if(url)url.remove();
+    document.getElementById("btn-music-url")?.remove();
+    document.getElementById("yt-wrap")?.remove();
     const file=document.getElementById("music-file");
     if(file)file.setAttribute("accept",".mp3,audio/mpeg,audio/*");
     const hint=document.createElement("p");
     hint.className="hint";
-    hint.textContent="MP3 do dispositivo funciona como música de fundo. Links do YouTube usam o player oficial visível, quando disponível; não é possível reproduzir somente o áudio ocultando o vídeo.";
+    hint.textContent="Escolha um MP3 do celular para tocar durante a partida, ou utilize as músicas oficiais do PAC-JHOW.";
     mediaPanel.appendChild(hint);
   }
   const dispatch=(type,key)=>window.dispatchEvent(new KeyboardEvent(type,{key,bubbles:true,cancelable:true}));
