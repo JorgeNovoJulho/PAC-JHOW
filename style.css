@@ -685,3 +685,19 @@ canvas#game {
   .panel { padding: 16px; }
   #music-name { min-width: 90px; font-size: 11px; }
 }
+
+/* Touch layout for the Capacitor Android build */
+.pac-mobile body { overscroll-behavior: none; }
+.pac-mobile #game-wrap { width:100%; max-width:100%; padding:6px; box-sizing:border-box; }
+.pac-mobile #game-col { min-width:0; width:100%; }
+.pac-mobile #scene { width:100%; max-width:100%; }
+.pac-mobile #game { max-width:100%; height:auto; touch-action:none; }
+.pac-mobile #side-col { display:none; }
+.pac-mobile #site-footer { display:none; }
+.pac-mobile #pac-touch-controls { display:flex; position:sticky; bottom:0; z-index:100; justify-content:space-between; align-items:center; padding:8px max(8px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left)); background:#070a26; touch-action:none; gap:12px; }
+.pac-dpad,.pac-actions { display:flex; flex-direction:column; gap:5px; }
+.pac-dpad>button { align-self:center; }
+.pac-dpad>div { display:flex; gap:5px; }
+#pac-touch-controls button { min-width:48px; min-height:48px; border-radius:12px; border:1px solid #568aff; background:#142454; color:white; font-weight:700; touch-action:none; user-select:none; }
+.pac-actions { display:grid; grid-template-columns:repeat(2,minmax(62px,1fr)); }
+.pac-actions button { font-size:12px; }
