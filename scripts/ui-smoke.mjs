@@ -77,6 +77,20 @@ try{
     if(persistent.tracks!==7||!persistent.playlist?.includes('smoke-test.mp3')||!persistent.saved?.level)
       fails.push('playlist persistence failed: '+JSON.stringify(persistent));
   }
+  if(!item.mobile){
+    // Nine actual rendered maze screenshots for human approval.
+    for(let level=2;level<=10;level++){
+      const stat=await page.evaluate(level=>{
+        document.querySelectorAll('.overlay.show').forEach(el=>el.classList.remove('show'));
+        initLevel(level);
+        return {level:game.level,pellets:game.dotsTotal,rows:game.grid.length,cols:game.grid[0].length};
+      },level);
+      await page.waitForTimeout(70);
+      await page.locator('#game').screenshot({path:'ui-smoke-results/maze-level-'+String(level).padStart(2,'0')+'.png'});
+      if(stat.level!==level||stat.rows!==31||stat.cols!==28||stat.pellets<250)
+        fails.push('maze-level-'+level+': '+JSON.stringify(stat));
+    }
+  }
   if(fails.length){failures++;console.error('FAIL '+item.name,JSON.stringify({fails,status,errors}));}
   else console.log('PASS '+item.name,JSON.stringify(status));
   await context.close();
