@@ -1,7 +1,7 @@
 "use strict";
 (() => {
  if(!/Android/i.test(navigator.userAgent))return;
- const CURRENT="1.1.3";
+ const CURRENT="1.1.4";
  const API="https://api.github.com/repos/JorgeNovoJulho/PAC-JHOW/releases?per_page=30";
  const RELEASES="https://github.com/JorgeNovoJulho/PAC-JHOW/releases";
  const settings=document.querySelector("#ov-settings .settings-panel");
