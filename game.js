@@ -227,7 +227,32 @@ function loadState() {
   try { const s = JSON.parse(localStorage.getItem(SAVE_KEY)); return (s && s.level) ? { level: s.level, score: s.score || 0 } : null; }
   catch (e) { return null; }
 }
-function saveState() { try { localStorage.setItem(SAVE_KEY, JSON.stringify({ level: game.level, score: game.score })); } catch (e) {} }
+function saveState() {
+  try {
+    localStorage.setItem(SAVE_KEY,JSON.stringify({level:game.level,score:game.score}));
+    return true;
+  }catch(e){console.error("Falha ao salvar:",e);return false;}
+}
+let saveToastTimeout=null;
+function saveNow() {
+  const msg=document.getElementById("pac-save-feedback");
+  if(!["play","ready","levelClear","dying"].includes(game.state)){
+    if(msg){msg.hidden=false;msg.textContent="Inicie uma partida antes de salvar.";}
+    return false;
+  }
+  const ok=saveState();
+  if(ok)updateTitleButtons();
+  if(msg){
+    msg.hidden=false;
+    msg.textContent=ok
+      ?"✅ Progresso salvo! Ao continuar, você retoma do início do nível "+game.level+"."
+      :"⚠️ Não foi possível salvar. Verifique o armazenamento do dispositivo.";
+    clearTimeout(saveToastTimeout);
+    saveToastTimeout=setTimeout(()=>{msg.hidden=true;},4400);
+  }
+  return ok;
+}
+window.PAC_SAVE_NOW=saveNow;
 function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} }
 
 function renderHighScoreTables() {
@@ -1635,6 +1660,7 @@ function syncMusicUI() {
   if (elMusicName) elMusicName.textContent = AudioSys.getTrackName() + "  (" + idx + "/" + total + ")";
   if (btnMute) btnMute.textContent = AudioSys.isEnabled() ? "🔊" : "🔇";
 }
+window.PAC_SYNC_MUSIC_UI=syncMusicUI;
 function toggleMusic() {
   AudioSys.lock();
   if (customMusicActive) { pauseCustomMusic(); syncMusicUI(); return; }
@@ -2163,6 +2189,11 @@ function customMusicIsPlaying() {
 }
 
 function restoreCustomMusic() {
+  // MP3 local antigo é migrado para a nova biblioteca (sem tocar duas fontes).
+  try {
+    const legacy=JSON.parse(localStorage.getItem(MUSIC_KEY)||"null");
+    if(legacy?.kind==="file"&&window.PAC_MUSIC_LIBRARY)return;
+  }catch(_){}
   try {
     const raw = localStorage.getItem(MUSIC_KEY);
     if (raw) savedMusic = JSON.parse(raw);
@@ -2219,21 +2250,23 @@ if (btnMusicUrl) {
     playCustomMusic(yt ? "yt" : "url", url, yt ? "YouTube" : decodeURIComponent(url.split("/").pop() || url), {});
   });
 }
-if (musicFileInput) {
-  musicFileInput.addEventListener("change", (ev) => {
-    const file = ev.target.files && ev.target.files[0];
-    ev.target.value = "";
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    // tenta guardar no IndexedDB (não há limite de ~5 MB)
-    idbPut("music", file).then(() => {
-      playCustomMusic("file", url, file.name, {});
-    }).catch(() => {
-      // fallback: dataURL em localStorage (pode falhar em ficheiros grandes)
-      const r = new FileReader();
-      r.onload = () => playCustomMusic("file", r.result, file.name, {});
-      r.readAsDataURL(file);
-    });
+if(musicFileInput){
+  musicFileInput.addEventListener("change",async(ev)=>{
+    const files=Array.from(ev.target.files||[]);
+    ev.target.value="";
+    if(!files.length)return;
+    if(!window.PAC_MUSIC_LIBRARY){setMusicStatus("Biblioteca de músicas indisponível.");return;}
+    let added=0;
+    for(const file of files){
+      try{
+        await window.PAC_MUSIC_LIBRARY.add(file,file.name,{start:added===0});
+        added++;
+      }catch(error){
+        setMusicStatus("⚠️ "+file.name+": "+error.message);
+      }
+    }
+    if(added)setMusicStatus("✅ "+added+" MP3 salvo(s) e incluído(s) na sequência automática.");
+    syncMusicUI();
   });
 }
 const btnMusicPause = document.getElementById("btn-music-pause");
