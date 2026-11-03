@@ -314,7 +314,7 @@ function isSolidCell(c, r, forGhost) {
 /* ---------------------------- Construção do nível ------------------------ */
 function buildLevelGrid(level) {
   if (level === 1) return window.buildGrid();
-  if (level >= 2 && level <= 10) return window.buildGridFromRows(window.generateApprovedMaze(level));
+  if (level >= 2 && level <= 20) return window.buildGridFromRows(window.generateApprovedMaze(level));
   return window.buildGridFromRows(window.generateMaze(level + 70000));
 }
 
