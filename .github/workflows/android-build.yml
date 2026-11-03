@@ -26,6 +26,8 @@ jobs:
         run: |
           npm install --no-save --no-package-lock playwright
           npx playwright install chromium --with-deps
+      - name: Validate all approved maze layouts
+        run: node scripts/validate-approved-mazes.cjs
       - name: Validate Android and desktop interfaces
         run: node scripts/ui-smoke.mjs
       - name: Upload UI screenshots
