@@ -1,5 +1,14 @@
 # PAC-JHOW — Móvel Studio Edition
 
+## 🎮 Baixe a versão atual — Windows ou Android
+
+**[⬇️ Baixar PAC-JHOW para Windows 1.0.6](https://github.com/JorgeNovoJulho/PAC-JHOW/releases/download/v1.0.6/PAC-JHOW-Setup-1.0.6.exe)**
+
+**[⬇️ Baixar PAC-JHOW para Android 1.1.3 Beta](https://github.com/JorgeNovoJulho/PAC-JHOW/releases/download/v1.1.3-android-beta/PAC-JHOW-Android-1.1.3-beta.apk)**
+
+Novidades: botão 💾 **SALVAR** na barra superior do Windows (retomada no início do nível) e MP3 enviados pelo jogador salvos localmente em uma playlist automática nos dois sistemas. O Android ainda usa assinatura beta de desenvolvimento: pode exigir reinstalação e causar perda dos dados locais. Instalar atualizações requer confirmação do sistema.
+
+
 Jogo Pac-Man para **Windows**, com 20 níveis, foto do personagem, música
 personalizada, duas faixas oficiais **Pac-Jhow** e extras de ação. A aplicação é
 instalada como um programa normal: **não é preciso abrir o navegador**.
