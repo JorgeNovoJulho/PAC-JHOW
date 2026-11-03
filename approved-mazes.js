@@ -94,6 +94,54 @@ function generateApprovedMaze(level){
   g[12][13]="-";g[12][14]="-";
   g[11][13]=" ";g[11][14]=" ";
   g[23][13]=" ";g[23][14]=" ";
+  // Garantia adicional de conectividade (apenas níveis novos 11–20).
+  // Interliga componentes desconectados por caminhos de menor custo, sem
+  // atravessar a casa dos fantasmas nem modificar mapas aprovados 2–10.
+  if(level>=11){
+    const pos=(x,y)=>y*W+x;
+    const dirs=[[1,0],[-1,0],[0,1],[0,-1]];
+    const inside=(x,y)=>x>=1&&x<=26&&y>=1&&y<=29;
+    function reachable(){
+      const seen=new Set([pos(13,23)]),q=[[13,23]];
+      for(let i=0;i<q.length;i++){
+        const [x,y]=q[i];
+        for(const [dx,dy] of dirs){
+          const a=x+dx,b=y+dy,k=pos(a,b);
+          if(inside(a,b)&&!house(a,b)&&g[b][a]!=="#"&&g[b][a]!=="-"&&!seen.has(k)){
+            seen.add(k);q.push([a,b]);
+          }
+        }
+      }
+      return seen;
+    }
+    for(let attempt=0;attempt<30;attempt++){
+      const seen=reachable();
+      let seed=null;
+      for(let y=1;y<=29&&!seed;y++)for(let x=1;x<=26;x++){
+        if(!house(x,y)&&g[y][x]!=="#"&&g[y][x]!=="-"&&!seen.has(pos(x,y))){seed=[x,y];break;}
+      }
+      if(!seed)break;
+      const distance=new Array(W*H).fill(Infinity),parent=new Array(W*H).fill(-1);
+      const queue=[[...seed]],start=pos(...seed);distance[start]=0;
+      // Deterministic Dijkstra 0/1, minimizing cuts in intact walls.
+      let target=-1;
+      while(queue.length){
+        queue.sort((a,b)=>distance[pos(...a)]-distance[pos(...b)]);
+        const [x,y]=queue.shift(),at=pos(x,y);
+        if(seen.has(at)){target=at;break;}
+        for(const [dx,dy] of dirs){
+          const a=x+dx,b=y+dy;if(!inside(a,b)||house(a,b)||g[b][a]==="-")continue;
+          const nxt=pos(a,b),cost=g[b][a]==="#"?1:0,nd=distance[at]+cost;
+          if(nd<distance[nxt]){distance[nxt]=nd;parent[nxt]=at;queue.push([a,b]);}
+        }
+      }
+      if(target<0)throw Error("Falha de conectividade no nível "+level);
+      for(let at=target;at!==-1;at=parent[at]){
+        const x=at%W,y=Math.floor(at/W);
+        if(g[y][x]==="#")g[y][x]=" ";
+      }
+    }
+  }
   // Energizers distribuídos nos quatro quadrantes, todos em área acessível.
   const energies=[[1,1],[26,1],[1,29],[26,29]];
   for(const [x,y] of energies)g[y][x]="o";
