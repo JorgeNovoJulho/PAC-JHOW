@@ -1,0 +1,119 @@
+name: Publish PAC-JHOW Windows and Android (approved update)
+on:
+  push:
+    branches:
+      - feat/android-capacitor-1.1.0
+    paths:
+      - .github/workflows/publish-dual-release.yml
+permissions:
+  contents: write
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build Windows installer
+        run: npx electron-builder --win nsis --x64 --publish never
+      - name: Verify installer version and metadata
+        shell: pwsh
+        run: |
+          if (!(Test-Path 'dist/PAC-JHOW-Setup-1.0.6.exe')) { throw "Windows 1.0.6 setup missing" }
+          if (!(Test-Path 'dist/latest.yml')) { throw "latest.yml missing: updates would fail" }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pac-jhow-windows-release
+          path: |
+            dist/PAC-JHOW-Setup-1.0.6.exe
+            dist/PAC-JHOW-Setup-1.0.6.exe.blockmap
+            dist/latest.yml
+          if-no-files-found: error
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install and test shared UI
+        run: |
+          npm install --no-save --no-package-lock playwright @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7 @capacitor/browser@7
+          npx playwright install chromium --with-deps
+          node scripts/ui-smoke.mjs
+      - name: Prepare Android assets
+        run: |
+          mkdir -p web/icons
+          cp index.html style.css game.js dialogues.js achievements.js audio.js music-library.js maze.js settings.js leaderboard.js mobile-controls.js android-updater.js android-record.js web/
+          cp Pac-Jhow.mp3 Pac-Jhow-2.mp3 pacman.ico web/
+          cp -R icons/. web/icons/
+          npx cap add android
+          npx cap sync android
+          python -m pip install --quiet Pillow
+          python scripts/apply-android-icon.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path("android/app/build.gradle")
+          s=p.read_text()
+          s,n=re.subn(r'versionCode\s+\d+', 'versionCode 10103', s, count=1)
+          if n!=1: raise SystemExit("Android versionCode missing")
+          s,n=re.subn(r'versionName\s+"[^"]+"','versionName "1.1.3-beta"',s,count=1)
+          if n!=1: raise SystemExit("Android versionName missing")
+          p.write_text(s)
+          PY
+      - name: Build Android beta APK
+        working-directory: android
+        run: bash ./gradlew assembleDebug --no-daemon
+      - name: Stage Android beta
+        run: |
+          mkdir -p android-public
+          cp android/app/build/outputs/apk/debug/app-debug.apk android-public/PAC-JHOW-Android-1.1.3-beta.apk
+          sha256sum android-public/*.apk > android-public/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pac-jhow-android-beta-release
+          path: android-public/*
+          if-no-files-found: error
+  publish:
+    runs-on: ubuntu-latest
+    needs: [windows,android]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: pac-jhow-windows-release
+          path: releases/windows
+      - uses: actions/download-artifact@v4
+        with:
+          name: pac-jhow-android-beta-release
+          path: releases/android
+      - name: Create releases without overwriting existing installs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          test -s releases/windows/PAC-JHOW-Setup-1.0.6.exe
+          test -s releases/windows/latest.yml
+          test -s releases/android/PAC-JHOW-Android-1.1.3-beta.apk
+          if gh release view v1.0.6 >/dev/null 2>&1; then
+            echo 'Windows release already exists; no overwrite'
+          else
+            gh release create v1.0.6 releases/windows/* --latest --target "$GITHUB_SHA" \
+              --title "PAC-JHOW Windows 1.0.6" \
+              --notes "Novo botão SALVAR com retomada no início do nível, MP3 locais persistentes em playlist automática, diálogos, conquistas e efeitos arcade. Instalador Windows sem assinatura comercial."
+          fi
+          if gh release view v1.1.3-android-beta >/dev/null 2>&1; then
+            echo 'Android release already exists; no overwrite'
+          else
+            gh release create v1.1.3-android-beta releases/android/* --prerelease --target "$GITHUB_SHA" \
+              --title "PAC-JHOW Android 1.1.3 Beta" \
+              --notes "Botão de progresso no Windows, playlist MP3 persistente compartilhada, diálogos e conquistas. Este APK Android é BETA e usa assinatura debug; pode exigir reinstalação e apagar dados locais. Instalação sempre requer confirmação do Android."
+          fi
