@@ -53,7 +53,8 @@
       "android-record.js",
       "mobile-controls.js",
       "android-updater.js",
-      "music-library.js"
+      "music-library.js",
+      "approved-mazes.js"
     ],
     "win": {
       "target": [
