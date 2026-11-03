@@ -936,3 +936,42 @@ canvas#game {
 .pac-mobile #pac-achievement-list {grid-template-columns:repeat(2,minmax(0,1fr));}
 @media(max-width:355px){.pac-mobile #pac-achievement-list{grid-template-columns:1fr;}}
 @media(prefers-reduced-motion:reduce){#pac-achievement-toast{transition:none;}}
+
+/* Shared desktop Save action + persistent MP3 playlist */
+#btn-save-game{
+ border:1px solid #e1b94f;background:linear-gradient(150deg,#183f76,#10214e);
+ color:#ffe28e;border-radius:11px;min-width:116px;height:43px;
+ padding:0 12px;font-weight:900;font-size:12px;letter-spacing:.7px;
+ cursor:pointer;white-space:nowrap;box-shadow:inset 0 0 7px #e6b64222;
+}
+#btn-save-game:hover,#btn-save-game:focus-visible{
+ border-color:#ffe18a;box-shadow:0 0 12px #ffd34f65;outline:0;
+}
+#pac-save-feedback{
+ position:fixed;z-index:300;top:65px;left:50%;transform:translateX(-50%);
+ max-width:min(92vw,560px);padding:10px 16px;border:1px solid #84fbb1;
+ border-radius:12px;background:#091c38;color:#c9ffe0;font-weight:700;
+ text-align:center;box-shadow:0 4px 18px #000b;
+}
+#pac-save-feedback[hidden]{display:none!important;}
+#pac-library-list{display:grid;gap:5px;margin:7px 0 12px;max-width:100%;min-width:0;}
+.pac-library-row{
+ display:flex;align-items:center;gap:6px;max-width:100%;
+ border:1px solid #355caa;border-radius:8px;padding:5px 6px;background:#101d4a;
+}
+.pac-library-row span{
+ flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+ font-size:11px;color:#e1eeff;
+}
+.pac-library-row button{
+ cursor:pointer;flex:none;min-width:32px;min-height:30px;border-radius:7px;
+ border:1px solid #668ee2;background:#253b7c;color:white;font-weight:800;
+}
+.pac-library-row button:hover{border-color:#ffe18a;}
+@media(max-width:900px){
+ #header-controls{flex-wrap:wrap;justify-content:flex-end;}
+ #btn-save-game{min-width:100px;height:38px;font-size:11px;}
+}
+.pac-mobile #site-header{display:none!important;}
+.pac-mobile #pac-save-feedback{top:max(24px,env(safe-area-inset-top));}
+.pac-mobile #pac-library-list{max-height:min(35dvh,270px);overflow-y:auto;}
