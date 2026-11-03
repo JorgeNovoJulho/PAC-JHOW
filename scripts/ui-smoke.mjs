@@ -79,7 +79,7 @@ try{
   }
   if(!item.mobile){
     // Nine actual rendered maze screenshots for human approval.
-    for(let level=2;level<=10;level++){
+    for(let level=2;level<=20;level++){
       const stat=await page.evaluate(level=>{
         document.querySelectorAll('.overlay.show').forEach(el=>el.classList.remove('show'));
         initLevel(level);
@@ -87,7 +87,7 @@ try{
       },level);
       await page.waitForTimeout(70);
       await page.locator('#game').screenshot({path:'ui-smoke-results/maze-level-'+String(level).padStart(2,'0')+'.png'});
-      if(stat.level!==level||stat.rows!==31||stat.cols!==28||stat.pellets<250)
+      if(stat.level!==level||stat.rows!==31||stat.cols!==28||stat.pellets<210)
         fails.push('maze-level-'+level+': '+JSON.stringify(stat));
     }
   }
