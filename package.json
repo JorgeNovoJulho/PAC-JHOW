@@ -52,7 +52,8 @@
       "achievements.js",
       "android-record.js",
       "mobile-controls.js",
-      "android-updater.js"
+      "android-updater.js",
+      "music-library.js"
     ],
     "win": {
       "target": [
