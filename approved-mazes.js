@@ -1,7 +1,7 @@
-/* PAC-JHOW — Níveis 2–10 aprovados, adaptados à grade jogável 28 × 31.
+/* PAC-JHOW — Labirintos fixos 2–20 adaptados à grade jogável 28 × 31.
  * A arte aprovada é uma referência visual; estas receitas são layouts em tiles,
  * respeitando spawn, casa de fantasmas, túneis e conectividade do motor existente.
- * Níveis 1 e 11–20 permanecem inalterados.
+ * Nível 1 permanece inalterado. Layouts 2–10 preservados integralmente.
  */
 "use strict";
 
@@ -14,7 +14,17 @@ const APPROVED_DESIGNS=Object.freeze({
   7:{name:"Bulevares e retornos",vertical:[1,6,10,13,14,17,21,26],horizontal:[1,5,9,19,23,27,29],loops:7},
   8:{name:"Quatro quadrantes abertos",vertical:[1,5,9,13,14,18,22,26],horizontal:[1,6,9,19,23,26,29],loops:8},
   9:{name:"Rotas cruzadas",vertical:[1,5,10,13,14,17,22,26],horizontal:[1,5,9,19,23,27,29],loops:9},
-  10:{name:"Canais em zigue-zague",vertical:[1,5,9,13,14,18,22,26],horizontal:[1,5,9,19,23,27,29],loops:10}
+  10:{name:"Canais em zigue-zague",vertical:[1,5,9,13,14,18,22,26],horizontal:[1,5,9,19,23,27,29],loops:10},
+  11:{name:"Rotas cruzadas avançadas",vertical:[1,6,12,15,21,26],horizontal:[1,5,9,19,23,29],loops:11},
+  12:{name:"Anéis laterais",vertical:[1,5,11,16,22,26],horizontal:[1,6,10,20,26,29],loops:12},
+  13:{name:"Dobradiças e retornos",vertical:[1,5,10,13,14,18,23,26],horizontal:[1,5,10,20,25,29],loops:13},
+  14:{name:"Hexágonos suaves",vertical:[1,5,9,13,14,18,22,26],horizontal:[1,6,11,19,24,29],loops:14},
+  15:{name:"Pontes centrais",vertical:[1,5,10,13,14,17,22,26],horizontal:[1,5,9,19,25,29],loops:15},
+  16:{name:"Turbilhão controlado",vertical:[1,5,9,13,14,18,23,26],horizontal:[1,6,10,20,25,29],loops:16},
+  17:{name:"Caminhos orbitais",vertical:[1,4,9,13,14,18,23,26],horizontal:[1,5,10,20,25,29],loops:17},
+  18:{name:"Tripla espiral",vertical:[1,5,10,13,14,17,22,26],horizontal:[1,6,10,20,25,29],loops:18},
+  19:{name:"Circuito mestre",vertical:[1,5,9,13,14,18,22,26],horizontal:[1,5,10,20,25,29],loops:19},
+  20:{name:"Grande final equilibrada",vertical:[1,5,10,13,14,17,22,26],horizontal:[1,6,10,20,25,29],loops:20}
 });
 function generateApprovedMaze(level){
   const cfg=APPROVED_DESIGNS[level];
@@ -35,8 +45,8 @@ function generateApprovedMaze(level){
   for(const y of cfg.horizontal)line(1,y,26,y);
   for(const x of cfg.vertical)line(x,1,x,29);
   // Linhas externas e corredores centrais que conectam os quatro quadrantes.
-  for(const y of [3,11,17,25])line(1,y,26,y);
-  for(const x of [3,24])line(x,1,x,29);
+  for(const y of level<=10?[3,11,17,25]:(level<=15?[3,11,17,25]:[11,17,25]))line(1,y,26,y);
+  for(const x of level<=17?[3,24]:[3,24])line(x,1,x,29);
   // Casa preservada e anel de circulação aberto em volta.
   for(let x=9;x<=18;x++){carve(x,11);carve(x,17);}
   for(let y=10;y<=18;y++){carve(9,y);carve(18,y);}
@@ -50,6 +60,22 @@ function generateApprovedMaze(level){
   if(level===8){for(const x of [7,20])line(x,3,x,27);for(const y of [7,21])line(3,y,24,y);}
   if(level===9){for(const x of [7,20])line(x,3,x,27);for(const y of [7,21,28])line(1,y,26,y);}
   if(level===10){for(const y of [7,21,28])line(3,y,24,y);for(const x of [7,20])line(x,3,x,27);}
+  // Níveis 11–20: formas inspiradas nas novas pranchas. Mais decisões de
+  // percurso, porém corredores conectados e alternativas de fuga garantidas.
+  function ring(left,top,right,bottom){
+    line(left,top,right,top);line(left,bottom,right,bottom);
+    line(left,top,left,bottom);line(right,top,right,bottom);
+  }
+  if(level===11){line(7,3,7,27);line(20,3,20,27);line(3,7,24,7);}
+  if(level===12){ring(4,4,9,10);ring(18,4,23,10);ring(4,20,9,27);ring(18,20,23,27);}
+  if(level===13){ring(4,5,9,10);ring(18,20,23,26);line(7,7,20,7);line(7,23,20,23);}
+  if(level===14){ring(4,4,9,9);ring(18,4,23,9);ring(4,21,9,27);ring(18,21,23,27);line(6,7,21,7);}
+  if(level===15){line(5,7,22,7);line(5,22,22,22);line(7,5,7,25);line(20,5,20,25);}
+  if(level===16){ring(4,4,10,10);ring(17,4,23,10);ring(4,20,10,27);ring(17,20,23,27);}
+  if(level===17){ring(4,3,23,27);ring(7,6,20,24);line(7,7,20,7);}
+  if(level===18){ring(4,4,10,10);ring(17,4,23,10);ring(4,20,10,27);ring(17,20,23,27);line(7,7,20,7);}
+  if(level===19){ring(4,3,23,27);ring(7,6,20,24);line(3,7,24,7);line(3,22,24,22);}
+  if(level===20){ring(4,3,23,27);ring(7,6,20,24);line(3,8,24,8);line(3,22,24,22);line(7,7,7,25);line(20,7,20,25);}
   // Alternância decorativa de estruturas: pilares curtos ao longo de faixas
   // livres, sempre sem tocar os principais cruzamentos.
   for(let k=0;k<cfg.loops;k++){
