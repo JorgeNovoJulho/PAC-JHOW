@@ -1777,6 +1777,7 @@ document.getElementById("btn-menu-title").addEventListener("click", () => { Audi
 document.getElementById("btn-new-journey").addEventListener("click", () => { AudioSys.lock(); AudioSys.sfx.click(); clearSave(); startGame({ mode: "new" }); });
 document.getElementById("btn-new-game").addEventListener("click", () => { AudioSys.lock(); AudioSys.sfx.click(); clearSave(); startGame({ mode: "new" }); });
 document.getElementById("btn-gameover-home").addEventListener("click", () => { AudioSys.sfx.click(); goToTitle(); });
+document.getElementById("btn-save-game")?.addEventListener("click", saveNow);
 btnMute.addEventListener("click", toggleMusic);
 btnMusicPrev.addEventListener("click", () => { AudioSys.lock(); leaveCustomForDefault(); AudioSys.prevTrack(); syncMusicUI(); AudioSys.sfx.click(); });
 btnMusicNext.addEventListener("click", () => { AudioSys.lock(); leaveCustomForDefault(); AudioSys.nextTrack(); syncMusicUI(); AudioSys.sfx.click(); });
@@ -2257,6 +2258,7 @@ if(musicFileInput){
     if(!files.length)return;
     if(!window.PAC_MUSIC_LIBRARY){setMusicStatus("Biblioteca de músicas indisponível.");return;}
     let added=0;
+    if(customMusicActive)leaveCustomForDefault();
     for(const file of files){
       try{
         await window.PAC_MUSIC_LIBRARY.add(file,file.name,{start:added===0});
