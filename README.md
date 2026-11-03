@@ -1,10 +1,10 @@
 ## 🎮 Baixe a versão atual — Windows ou Android
 
-**[⬇️ Baixar PAC-JHOW para Windows 1.0.6](https://github.com/JorgeNovoJulho/PAC-JHOW/releases/download/v1.0.6/PAC-JHOW-Setup-1.0.6.exe)**
+**[⬇️ Baixar PAC-JHOW para Windows 1.0.7](https://github.com/JorgeNovoJulho/PAC-JHOW/releases/download/v1.0.7/PAC-JHOW-Setup-1.0.7.exe)**
 
-**[⬇️ Baixar PAC-JHOW para Android 1.1.3 Beta](https://github.com/JorgeNovoJulho/PAC-JHOW/releases/download/v1.1.3-android-beta/PAC-JHOW-Android-1.1.3-beta.apk)**
+**[⬇️ Baixar PAC-JHOW para Android 1.1.4 Beta](https://github.com/JorgeNovoJulho/PAC-JHOW/releases/download/v1.1.4-android-beta/PAC-JHOW-Android-1.1.4-beta.apk)**
 
-Novidades: botão 💾 **SALVAR** na barra superior do Windows (retomada no início do nível) e MP3 enviados pelo jogador salvos localmente em uma playlist automática nos dois sistemas. O Android ainda usa assinatura beta de desenvolvimento: pode exigir reinstalação e causar perda dos dados locais. Instalar atualizações requer confirmação do sistema.
+Novidades: os 20 níveis contam com mapas revisados (nível 1 clássico, níveis 2–20 com layouts fixos, caminhos acessíveis e dificuldade progressiva). Botão 💾 **SALVAR** na barra superior do Windows (retomada no início do nível) e MP3 enviados pelo jogador salvos localmente em uma playlist automática nos dois sistemas. O Android ainda usa assinatura beta de desenvolvimento: pode exigir reinstalação e causar perda dos dados locais. Instalar atualizações requer confirmação do sistema.
 
 ## 📱 PAC-JHOW Android — versão 1.1.2 Beta (atual)
 
