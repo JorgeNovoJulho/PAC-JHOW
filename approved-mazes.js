@@ -75,7 +75,7 @@ function generateApprovedMaze(level){
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){
     if(g[y][x]!==" ")continue;
     if((x>=11&&x<=16&&y>=13&&y<=15)||(x===13&&y===23))continue;
-    if(y===0||y===30)continue;
+    if(y===0||y===30||(y===16&&(x===0||x===27)))continue;
     g[y][x]=".";
   }
   return g.map(row=>row.join(""));
