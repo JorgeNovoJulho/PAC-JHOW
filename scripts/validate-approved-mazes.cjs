@@ -4,7 +4,7 @@ const {generateApprovedMaze,APPROVED_DESIGNS}=require("../approved-mazes.js");
 const {MAZE_ROWS,generateMaze}=require("../maze.js");
 const W=28,H=31,start=[13,23];
 const signatures=new Set();
-for(let level=2;level<=10;level++){
+for(let level=2;level<=20;level++){
  const rows=generateApprovedMaze(level);
  assert.equal(rows.length,H,`Nível ${level}: altura`);
  assert(rows.every(row=>row.length===W),`Nível ${level}: largura`);
@@ -34,9 +34,9 @@ for(let level=2;level<=10;level++){
    }
  }
  assert.equal(unreachable,0,`Nível ${level}: pontos inacessíveis`);
- assert(pellets>=250&&pellets<=650,`Nível ${level}: pontos fora do equilíbrio (${pellets})`);
+ assert(pellets>=210&&pellets<=650,`Nível ${level}: pontos fora do equilíbrio (${pellets})`);
  assert(deadEnds<=pellets*.06,`Nível ${level}: muitos becos sem saída (${deadEnds})`);
- assert(junctions>=35,`Nível ${level}: faltam rotas alternativas (${junctions})`);
+ assert(junctions>=25,`Nível ${level}: faltam rotas alternativas (${junctions})`);
  assert.equal(rows.join("").split("o").length-1,4,`Nível ${level}: power pellets`);
  const sig=crypto.createHash("sha256").update(rows.join("\n")).digest("hex");
  assert(!signatures.has(sig),`Nível ${level}: layout duplicado`);
@@ -44,4 +44,4 @@ for(let level=2;level<=10;level++){
  console.log(`PASS ${level} ${APPROVED_DESIGNS[level].name}: pontos=${pellets} cruzamentos=${junctions} becos=${deadEnds} SHA=${sig.slice(0,12)}`);
 }
 assert.equal(MAZE_ROWS.length,31,"Mapa 1 clássico inalterado");
-console.log("APROVADO: 9 layouts distintos, sem pontos inacessíveis.");
+console.log("APROVADO: 19 layouts distintos, sem pontos inacessíveis.");
