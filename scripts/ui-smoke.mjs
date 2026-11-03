@@ -50,6 +50,33 @@ try{
     });
     if(!modal.shown||modal.width>modal.windowWidth+1)fails.push('settings modal not responsive');
   }
+  if(!item.mobile){
+    await page.waitForFunction(()=>window.PAC_MUSIC_LIBRARY?.ready===true,{timeout:10000}).catch(()=>{});
+    const features=await page.evaluate(async()=>{
+      const saveBtn=document.getElementById('btn-save-game');
+      document.getElementById('btn-play')?.click();
+      saveBtn?.click();
+      const saved=JSON.parse(localStorage.getItem('movel-studio-pacman-save')||'null');
+      let libraryAdded=false;
+      try{
+        await window.PAC_MUSIC_LIBRARY.add(
+          new File([new Uint8Array(256)],'smoke-test.mp3',{type:'audio/mpeg'}),
+          'smoke-test.mp3',{start:false});
+        libraryAdded=AudioSys.trackCount()===7;
+      }catch(e){return {saveButton:!!saveBtn,saved,libraryAdded,error:String(e)};}
+      return {saveButton:!!saveBtn,saved,libraryAdded};
+    });
+    if(!features.saveButton||!features.saved?.level||!features.libraryAdded)fails.push('save / playlist failed: '+JSON.stringify(features));
+    await page.reload({waitUntil:'domcontentloaded'});
+    try{await page.waitForFunction(()=>window.PAC_MUSIC_LIBRARY?.ready===true,{timeout:10000});}catch(_){}
+    const persistent=await page.evaluate(()=>({
+      tracks:AudioSys.trackCount(),
+      playlist:window.PAC_MUSIC_LIBRARY?.list().map(x=>x.name),
+      saved:JSON.parse(localStorage.getItem('movel-studio-pacman-save')||'null')
+    }));
+    if(persistent.tracks!==7||!persistent.playlist?.includes('smoke-test.mp3')||!persistent.saved?.level)
+      fails.push('playlist persistence failed: '+JSON.stringify(persistent));
+  }
   if(fails.length){failures++;console.error('FAIL '+item.name,JSON.stringify({fails,status,errors}));}
   else console.log('PASS '+item.name,JSON.stringify(status));
   await context.close();
