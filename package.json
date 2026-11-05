@@ -1,7 +1,7 @@
 {
   "name": "pac-jhow",
   "productName": "PAC-JHOW",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "PAC-JHOW — jogo de Pac-Man com 20 níveis, foto personalizada, música e atualizações.",
   "author": "JorgeNovoJulho",
   "license": "MIT",
@@ -47,7 +47,14 @@
       "icons/**/*",
       "electron/**/*",
       "package.json",
-      "leaderboard.js"
+      "leaderboard.js",
+      "dialogues.js",
+      "achievements.js",
+      "android-record.js",
+      "mobile-controls.js",
+      "android-updater.js",
+      "music-library.js",
+      "approved-mazes.js"
     ],
     "win": {
       "target": [
