@@ -142,10 +142,16 @@ const AudioSys = (function () {
   const assetAudio = new Audio();
   assetAudio.preload = "auto";
   assetAudio.loop = true;
+  assetAudio.addEventListener("ended", () => {
+    if (enabled && musicOn && TRACKS[currentTrack]?.custom) nextTrack();
+  });
   assetAudio.volume = musicVol;
   assetAudio.addEventListener("error", () => {
     // Se o MP3 não estiver disponível, usa a primeira faixa sintetizada.
-    if (musicOn) { currentTrack = 1; stopMusic(); startCurrent(); }
+    if (musicOn) {
+      if (TRACKS.length > 1) playTrack((currentTrack + 1) % TRACKS.length);
+      else stopMusic();
+    }
   });
 
   function ensure() {
@@ -308,6 +314,7 @@ const AudioSys = (function () {
     stopSynth();
     try {
       if (assetAudio.getAttribute("src") !== tr.file) assetAudio.src = tr.file;
+      assetAudio.loop = !tr.custom;
       assetAudio.volume = musicVol;
       const p = assetAudio.play();
       if (p && p.catch) p.catch(() => {});
@@ -358,6 +365,22 @@ const AudioSys = (function () {
   function getTrackName() { return TRACKS[currentTrack].name; }
   function getTrackIndex() { return currentTrack; }
   function trackCount() { return TRACKS.length; }
+  function setLibraryTracks(entries) {
+    const oldId = TRACKS[currentTrack]?.customId || null;
+    TRACKS.splice(6, TRACKS.length-6, ...entries.map(x => ({
+      name:x.name, file:x.url, custom:true, customId:x.id
+    })));
+    if (oldId) {
+      const at = TRACKS.findIndex(t => t.customId === oldId);
+      if (at < 0) { stopMusic(); currentTrack=0; if(enabled)startCurrent(); }
+      else currentTrack=at;
+    }
+  }
+  function selectLibraryTrack(id) {
+    const index=TRACKS.findIndex(t=>t.customId===id);
+    if(index<0)return false;
+    playTrack(index); return true;
+  }
 
   /* ------------------------- Volumes ----------------------------------- */
   function setMusicVolume(v) {
@@ -479,7 +502,7 @@ const AudioSys = (function () {
   };
 
   return {
-    lock, resume, ensure, playTrack, nextTrack, prevTrack,
+    lock, resume, ensure, playTrack, nextTrack, prevTrack, setLibraryTracks, selectLibraryTrack,
     setEnabled, isEnabled, getTrackName, getTrackIndex, trackCount, stopMusic,
     setMusicVolume, getMusicVolume, setSfxVolume, getSfxVolume, sfx
   };
