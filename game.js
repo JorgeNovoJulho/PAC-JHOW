@@ -227,7 +227,32 @@ function loadState() {
   try { const s = JSON.parse(localStorage.getItem(SAVE_KEY)); return (s && s.level) ? { level: s.level, score: s.score || 0 } : null; }
   catch (e) { return null; }
 }
-function saveState() { try { localStorage.setItem(SAVE_KEY, JSON.stringify({ level: game.level, score: game.score })); } catch (e) {} }
+function saveState() {
+  try {
+    localStorage.setItem(SAVE_KEY,JSON.stringify({level:game.level,score:game.score}));
+    return true;
+  }catch(e){console.error("Falha ao salvar:",e);return false;}
+}
+let saveToastTimeout=null;
+function saveNow() {
+  const msg=document.getElementById("pac-save-feedback");
+  if(!["play","ready","levelClear","dying"].includes(game.state)){
+    if(msg){msg.hidden=false;msg.textContent="Inicie uma partida antes de salvar.";}
+    return false;
+  }
+  const ok=saveState();
+  if(ok)updateTitleButtons();
+  if(msg){
+    msg.hidden=false;
+    msg.textContent=ok
+      ?"✅ Progresso salvo! Ao continuar, você retoma do início do nível "+game.level+"."
+      :"⚠️ Não foi possível salvar. Verifique o armazenamento do dispositivo.";
+    clearTimeout(saveToastTimeout);
+    saveToastTimeout=setTimeout(()=>{msg.hidden=true;},4400);
+  }
+  return ok;
+}
+window.PAC_SAVE_NOW=saveNow;
 function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} }
 
 function renderHighScoreTables() {
@@ -256,7 +281,8 @@ function opposite(a, b) { return a.x === -b.x && a.y === -b.y; }
 function cellFromPos(x, y) { return { c: Math.floor(x), r: Math.floor(y) }; }
 function dist(x1, y1, x2, y2) { return Math.hypot(x1 - x2, y1 - y2); }
 function dirKey(d) { return (d.x || 0) + "," + (d.y || 0); }
-function say(text, dur) { game.speech = { text: String(text), t: dur || 1.8, max: dur || 1.8 }; }
+function say(text, dur) { game.speech = { text: String(text), t: dur || 2.8, max: dur || 2.8 }; }
+window.PAC_SAY=say;
 
 function hexToRgb(h) {
   const m = /^#?([a-f0-9]{6})$/i.exec(h || "");
@@ -288,6 +314,7 @@ function isSolidCell(c, r, forGhost) {
 /* ---------------------------- Construção do nível ------------------------ */
 function buildLevelGrid(level) {
   if (level === 1) return window.buildGrid();
+  if (level >= 2 && level <= 20) return window.buildGridFromRows(window.generateApprovedMaze(level));
   return window.buildGridFromRows(window.generateMaze(level + 70000));
 }
 
@@ -348,6 +375,7 @@ function initLevel(level) {
   if (!customMusicActive) AudioSys.playTrack((game.level - 1) % AudioSys.trackCount());
   syncMusicUI();
   enterReady(diff);
+  if (window.PAC_SAY_EVENT) window.PAC_SAY_EVENT(game.level%4===0?"ghost":"levelStart", 3.2,game.level%4===0?["red","pink","blue","orange"][Math.floor(game.level/4-1)%4]:"pac");
 }
 
 function placeEntities(diff) {
@@ -617,13 +645,18 @@ function eatPelletAt() {
     game.grid[r][c] = " ";
     addScore(10);
     game.dotsEaten++;
+    window.PAC_ACHIEVEMENTS?.add("pellet");
+    // Small, throttled pickup sparkle; shared on desktop and Android.
+    if (game.dotsEaten % 4 === 0 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+      spawnBurst(c + .5, r + .5, "#ffe598", 3, 1.4);
     AudioSys.sfx.waka(Math.floor(pac.mouthT * 10) % 2 === 0);
   } else if (ch === "o") {
     game.grid[r][c] = " ";
     addScore(50);
     game.dotsEaten++;
+    window.PAC_ACHIEVEMENTS?.add("pellet");
     activateFright();
-    say("Sai correndo...");
+    if (window.PAC_SAY_EVENT) window.PAC_SAY_EVENT("powerUp"); else say("Sai correndo...");
     fam("powerUp");
     spawnBurst(c + 0.5, r + 0.5, "#ffd24a", 14, 3.2);
   }
@@ -834,6 +867,7 @@ function updateMissile(dt) {
         spawnBurst(g.x, g.y, "#9fd8ff", 20, 3.8);
         addScore(100);
         addFloating(g.x, g.y, 100, "#bfe9ff");
+        window.PAC_ACHIEVEMENTS?.add("ghost");
         g.state = "eyes";
         g.speed = EYES_SPEED;
         g.eyesT = 0;
@@ -970,6 +1004,8 @@ function updateBombs2(dt) {
       if (g.state !== "active" && g.state !== "fright" && g.state !== "leaving") continue;
       if (dist(b.x, b.y, g.x, g.y) < 0.6) {
         game.bombs.splice(i, 1);
+        addBlastRing(b.x,b.y);
+        window.PAC_ACHIEVEMENTS?.add("bomb");
         spawnBurst(b.x, b.y, "#ff9d3d", 30, 4.5);
         spawnBurst(b.x, b.y, "#fff0b0", 14, 3);
         fam("bomb");
@@ -985,6 +1021,7 @@ function updateBombs2(dt) {
     // explosão também atinge o monstro
     if (!boom && game.monster && dist(b.x, b.y, game.monster.x, game.monster.y) < 0.6) {
       game.bombs.splice(i, 1);
+      addBlastRing(b.x,b.y);
       spawnBurst(b.x, b.y, "#ff9d3d", 30, 4.5);
       spawnBurst(b.x, b.y, "#fff0b0", 14, 3);
       fam("bomb");
@@ -1300,6 +1337,7 @@ function addScore(v) {
 function addFloating(x, y, text, color) { game.floating.push({ x, y, text, color, t: 1.3 }); }
 
 function spawnBurst(x, y, color, n, spd) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) n = Math.min(n, 4);
   for (let i = 0; i < n; i++) {
     const a = Math.random() * Math.PI * 2;
     const v = (0.4 + Math.random()) * spd;
@@ -1307,7 +1345,26 @@ function spawnBurst(x, y, color, n, spd) {
   }
   if (game.particles.length > 400) game.particles.splice(0, game.particles.length - 400);
 }
+const pacBlastRings = [];
+function addBlastRing(x,y) {
+  pacBlastRings.push({x,y,t:0,life:.38});
+  if(pacBlastRings.length>6)pacBlastRings.shift();
+}
+function drawBlastRings(){
+  ctx.save();
+  for(const r of pacBlastRings){
+    const p=Math.min(1,r.t/r.life);
+    ctx.strokeStyle="rgba(255,193,94,"+(.75*(1-p)).toFixed(3)+")";
+    ctx.lineWidth=3*(1-p)+.5;
+    ctx.beginPath();ctx.arc(r.x*TILE,r.y*TILE,4+26*p,0,Math.PI*2);ctx.stroke();
+  }
+  ctx.restore();
+}
 function updateParticles(dt) {
+  for(let i=pacBlastRings.length-1;i>=0;i--){
+    pacBlastRings[i].t+=dt;
+    if(pacBlastRings[i].t>=pacBlastRings[i].life)pacBlastRings.splice(i,1);
+  }
   for (let i = game.particles.length - 1; i >= 0; i--) {
     const p = game.particles[i];
     p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt;
@@ -1518,7 +1575,9 @@ function update(dt) {
 function checkLevelClear() {
   if (game.dotsEaten >= game.dotsTotal) {
     game.state = "levelClear";
+    window.PAC_ACHIEVEMENTS?.add("level");
     game.clearT = 2.2;
+    if(window.PAC_SAY_EVENT)window.PAC_SAY_EVENT("victory",2.2);
     const bonus = 1000 + game.level * 100;
     addScore(bonus);
     addFloating(COLS / 2, 11.5, "NÍVEL COMPLETO!", "#ffd24a");
@@ -1602,6 +1661,7 @@ function syncMusicUI() {
   if (elMusicName) elMusicName.textContent = AudioSys.getTrackName() + "  (" + idx + "/" + total + ")";
   if (btnMute) btnMute.textContent = AudioSys.isEnabled() ? "🔊" : "🔇";
 }
+window.PAC_SYNC_MUSIC_UI=syncMusicUI;
 function toggleMusic() {
   AudioSys.lock();
   if (customMusicActive) { pauseCustomMusic(); syncMusicUI(); return; }
@@ -1718,6 +1778,7 @@ document.getElementById("btn-menu-title").addEventListener("click", () => { Audi
 document.getElementById("btn-new-journey").addEventListener("click", () => { AudioSys.lock(); AudioSys.sfx.click(); clearSave(); startGame({ mode: "new" }); });
 document.getElementById("btn-new-game").addEventListener("click", () => { AudioSys.lock(); AudioSys.sfx.click(); clearSave(); startGame({ mode: "new" }); });
 document.getElementById("btn-gameover-home").addEventListener("click", () => { AudioSys.sfx.click(); goToTitle(); });
+document.getElementById("btn-save-game")?.addEventListener("click", saveNow);
 btnMute.addEventListener("click", toggleMusic);
 btnMusicPrev.addEventListener("click", () => { AudioSys.lock(); leaveCustomForDefault(); AudioSys.prevTrack(); syncMusicUI(); AudioSys.sfx.click(); });
 btnMusicNext.addEventListener("click", () => { AudioSys.lock(); leaveCustomForDefault(); AudioSys.nextTrack(); syncMusicUI(); AudioSys.sfx.click(); });
@@ -1971,7 +2032,7 @@ function playYouTube(id) {
       return;
     }
     ytPlayer = new YT.Player("yt-player", {
-      width: "100%", height: "120", videoId: id,
+      width: "100%", height: "220", videoId: id,
       playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
       events: {
         onReady: (e) => { try { e.target.playVideo(); } catch (err) {} },
@@ -2130,6 +2191,11 @@ function customMusicIsPlaying() {
 }
 
 function restoreCustomMusic() {
+  // MP3 local antigo é migrado para a nova biblioteca (sem tocar duas fontes).
+  try {
+    const legacy=JSON.parse(localStorage.getItem(MUSIC_KEY)||"null");
+    if(legacy?.kind==="file"&&window.PAC_MUSIC_LIBRARY)return;
+  }catch(_){}
   try {
     const raw = localStorage.getItem(MUSIC_KEY);
     if (raw) savedMusic = JSON.parse(raw);
@@ -2186,21 +2252,24 @@ if (btnMusicUrl) {
     playCustomMusic(yt ? "yt" : "url", url, yt ? "YouTube" : decodeURIComponent(url.split("/").pop() || url), {});
   });
 }
-if (musicFileInput) {
-  musicFileInput.addEventListener("change", (ev) => {
-    const file = ev.target.files && ev.target.files[0];
-    ev.target.value = "";
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    // tenta guardar no IndexedDB (não há limite de ~5 MB)
-    idbPut("music", file).then(() => {
-      playCustomMusic("file", url, file.name, {});
-    }).catch(() => {
-      // fallback: dataURL em localStorage (pode falhar em ficheiros grandes)
-      const r = new FileReader();
-      r.onload = () => playCustomMusic("file", r.result, file.name, {});
-      r.readAsDataURL(file);
-    });
+if(musicFileInput){
+  musicFileInput.addEventListener("change",async(ev)=>{
+    const files=Array.from(ev.target.files||[]);
+    ev.target.value="";
+    if(!files.length)return;
+    if(!window.PAC_MUSIC_LIBRARY){setMusicStatus("Biblioteca de músicas indisponível.");return;}
+    let added=0;
+    if(customMusicActive)leaveCustomForDefault();
+    for(const file of files){
+      try{
+        await window.PAC_MUSIC_LIBRARY.add(file,file.name,{start:added===0});
+        added++;
+      }catch(error){
+        setMusicStatus("⚠️ "+file.name+": "+error.message);
+      }
+    }
+    if(added)setMusicStatus("✅ "+added+" MP3 salvo(s) e incluído(s) na sequência automática.");
+    syncMusicUI();
   });
 }
 const btnMusicPause = document.getElementById("btn-music-pause");
@@ -2963,6 +3032,18 @@ function draw() {
     ctx.fillStyle = "rgba(215,228,255," + al.toFixed(3) + ")";
     ctx.beginPath(); ctx.arc((st.x + 0.5) * TILE, (st.y + 0.5) * TILE, st.size, 0, Math.PI * 2); ctx.fill();
   }
+  // Slow atmospheric pulses in open corridors; no extra canvas layers or textures.
+  if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    ctx.save();
+    for(let i=0;i<Math.min(10,TWINKLE.length);i++){
+      const st=TWINKLE[i], p=.5+.5*Math.sin(game.globalTimer*.75+st.ph);
+      ctx.globalAlpha=.06+.10*p;
+      ctx.strokeStyle=i%2?"#69b7ff":"#ffe684";
+      ctx.lineWidth=1+p;
+      ctx.beginPath();ctx.arc((st.x+.5)*TILE,(st.y+.5)*TILE,3+5*p,0,Math.PI*2);ctx.stroke();
+    }
+    ctx.restore();
+  }
   drawPellets();
   drawHousePhoto();
   for (const f of game.fruits) drawFruitEntity(f);
@@ -2975,6 +3056,17 @@ function draw() {
   drawMonster();
   drawProjectiles();
   drawParticles();
+  drawBlastRings();
+  if(game.state==="levelClear"){
+    ctx.save();
+    ctx.fillStyle="rgba(4,9,34,.78)";
+    ctx.fillRect(20,canvas.height*.39,canvas.width-40,82);
+    ctx.strokeStyle="#ffd553";ctx.lineWidth=2;
+    ctx.strokeRect(20,canvas.height*.39,canvas.width-40,82);
+    ctx.fillStyle="#ffda53";ctx.textAlign="center";ctx.font="bold 30px system-ui";
+    ctx.fillText("NÍVEL "+game.level+" CONCLUÍDO!",canvas.width/2,canvas.height*.39+49);
+    ctx.restore();
+  }
   drawFloating();
   drawMessages();
 }

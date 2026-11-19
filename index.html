@@ -39,8 +39,10 @@
         </label>
         <button id="btn-mute" type="button" title="Ouvir / parar a música (M)">🔊</button>
         <button id="btn-settings" type="button" title="Opções e atualizações">⚙️</button>
+        <button id="btn-save-game" type="button" title="Salvar o progresso (retoma no início do nível)" aria-label="Salvar progresso">💾 SALVAR</button>
       </div>
     </header>
+    <div id="pac-save-feedback" role="status" aria-live="polite" hidden></div>
 
     <!-- HUD -->
     <div id="hud">
@@ -281,12 +283,14 @@
       </div>
       <p class="hint" id="pic-status-panel">Sem foto — Pac-Man clássico</p>
 
-      <h4>🎵 Música personalizada</h4>
+      <h4>🎵 Biblioteca musical do jogador</h4>
+      <p class="hint">MP3 adicionados ficam salvos neste dispositivo e entram na sequência automática das músicas do jogo.</p>
+      <div id="pac-library-list" aria-label="Músicas salvas"></div>
       <input id="music-url" class="media-input" type="url" placeholder="URL de música ou YouTube" autocomplete="off">
       <div class="media-row">
         <button id="btn-music-url" class="btn small" type="button">▶ Tocar URL</button>
         <label for="music-file" class="btn pic-pick small">📂 Dispositivo</label>
-        <input id="music-file" type="file" accept="audio/*" hidden>
+        <input id="music-file" type="file" accept=".mp3,audio/mpeg" multiple hidden>
       </div>
       <div class="media-row">
         <button id="btn-music-pause" class="btn small" type="button">⏸ Pausa</button>
@@ -304,9 +308,16 @@
   </div>
 
   <script src="maze.js"></script>
+  <script src="approved-mazes.js"></script>
   <script src="audio.js"></script>
+  <script src="music-library.js"></script>
   <script src="game.js"></script>
+  <script src="dialogues.js"></script>
+  <script src="achievements.js"></script>
   <script src="settings.js"></script>
   <script src="leaderboard.js"></script>
+  <script src="mobile-controls.js"></script>
+  <script src="android-updater.js"></script>
+  <script src="android-record.js"></script>
 </body>
 </html>
